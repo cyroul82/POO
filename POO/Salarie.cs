@@ -9,11 +9,21 @@ namespace TPCSharp
     class Salarie
     {
 
-        private static int count = 0;
+        //private static int Count = 0;
 
-        private int matricule, categorie, service;
-        private string name;
-        private double salaire;
+        public static int Count { get; private set; } = 0;
+
+        public int Categorie { get; set; }
+
+        public int Matricule { get; private set; }
+
+        public int Service { get; set; }
+
+        public String Name { get; set; }
+
+        public Double Salaire { get; set; }
+
+        public String Email { get; set; }
 
         public enum Categories
         {
@@ -25,86 +35,24 @@ namespace TPCSharp
 
         public Salarie()
         {
-            matricule = count;
-            count++;
+            Matricule = Count;
+            Count++;
+           
         }
 
-        public Salarie(int catg, int serv, string nomSal, double sal)
+        public Salarie(int catg, int serv, string nomSal, double sal, String email)
         {
-            this.categorie = catg;
-            this.Service = serv;
-            this.Name = nomSal;
-            this.Salaire = sal;
-            count++;
+            Categorie = catg;
+            Service = serv;
+            Name = nomSal;
+            Salaire = sal;
+            Matricule = Count;
+            Email = email;
+            Count++;
         }
 
-        public static int GetCount
-        {
-            get
-            {
-                return count;
-            }
-        }
 
-        public int Categorie
-        {
-            get
-            {
-                return categorie;
-            }
-
-            set
-            {
-                categorie = value;
-            }
-        }
-
-        public int Matricule
-        {
-            get
-            {
-                return matricule;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-
-            set
-            {
-                name = value;
-            }
-        }
-
-        public double Salaire
-        {
-            get
-            {
-                return salaire;
-            }
-
-            set
-            {
-                salaire = value;
-            }
-        }
-
-        public int Service
-        {
-            get
-            {
-                return service;
-            }
-
-            set
-            {
-                service = value;
-            }
-        }
+        
 
         public string CalculerSalaire()
         {
