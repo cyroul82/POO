@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POO
+namespace TPCSharp
 {
-    class Program
+    class Personne
     {
-        static void Main(string[] args)
-        {
-        }
+
     }
 }

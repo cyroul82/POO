@@ -7,8 +7,8 @@
     <ProjectGuid>{B390D7F8-E195-41C5-8966-CC93D3280DA8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>POO</RootNamespace>
-    <AssemblyName>POO</AssemblyName>
+    <RootNamespace>TPCSharp</RootNamespace>
+    <AssemblyName>TPCSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,8 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="Personne.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Salarie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
