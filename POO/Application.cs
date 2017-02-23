@@ -157,7 +157,7 @@ namespace TPCSharp
         private static void DisplaySalarie(Salarie s)
         {
             CenterText("Name : "+ s.Name + "\n\tMatricule : " + s.Matricule + "\n\tCategorie : " 
-                        + s.Categorie + "\n\tService : " + s.Service +"\n\tSalaire: " + s.Salaire);
+                        + s.Categorie + "\n\tService : " + s.Service +"\n\tSalaire: " + s.Salaire + "\n\tEmail : " + s.Email);
         }
 
         private static int CheckCategory(String cat) 
