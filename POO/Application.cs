@@ -33,7 +33,10 @@ namespace TPCSharp
 
                 try
                 {
+                    Console.WriteLine("");
+                    Console.Write("Entrez votre Choix : ");
                     Int32 choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("");
                     switch (choice)
                     {
                         case 1:
@@ -128,7 +131,7 @@ namespace TPCSharp
             Boolean flag = true;
             while (flag)
             {
-                Console.WriteLine("Email @ : ");
+                Console.Write("Email @ : ");
                 if (Program.checkEmail(Console.ReadLine())) flag = false;
             }
             
@@ -156,7 +159,7 @@ namespace TPCSharp
 
         private static void DisplaySalarie(Salarie s)
         {
-            CenterText("Name : "+ s.Name + "\n\tMatricule : " + s.Matricule + "\n\tCategorie : " 
+            Console.Write("Name : "+ s.Name + "\n\tMatricule : " + s.Matricule + "\n\tCategorie : " 
                         + s.Categorie + "\n\tService : " + s.Service +"\n\tSalaire: " + s.Salaire + "\n\tEmail : " + s.Email);
         }
 
@@ -261,12 +264,6 @@ namespace TPCSharp
             }
         }
 
-        private static void CenterText(String text)
-        {
-            int space = (Console.WindowWidth - text.Length) / 2;
-            Console.SetCursorPosition(space, Console.CursorTop);
-            Console.WriteLine(text);
-        }
 
         private static void PrintErrorMessage()
         {
