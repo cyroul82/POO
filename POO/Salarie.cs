@@ -8,10 +8,8 @@ namespace TPCSharp
 {
     public class Salarie : Personne
     {
-
-        //private static int Count = 0;
-
-        public static int Count { get; private set; } = 0;
+        
+        private static int Count { get; set; } = 0;
 
         public int Categorie { get; set; }
 

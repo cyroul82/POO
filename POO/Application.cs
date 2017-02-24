@@ -15,6 +15,7 @@ namespace TPCSharp
 
         static void Main(string[] args)
         {
+           
             Boolean b = true;
             while (b)
             {
@@ -209,14 +210,9 @@ namespace TPCSharp
             {
                 foreach (Salarie sal in listSalarie)
                 {
-                    if(sal is Commercial)
-                    {
-                        Commercial c = (Commercial)sal;
-                        DisplayCommercial(c);
-                    }
-                    else { 
-                        DisplaySalarie(sal);
-                    }
+                    
+                    DisplaySalarie(sal);
+
                 }
             }
         }
@@ -227,11 +223,6 @@ namespace TPCSharp
             Console.WriteLine("");
         }
 
-        private static void DisplayCommercial(Commercial c)
-        {
-            Console.Write(c.ToString());
-            Console.WriteLine("");
-        }
 
 
 
