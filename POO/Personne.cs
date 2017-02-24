@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TPCSharp
 {
-    class Personne
+    public abstract class Personne
     {
+        public abstract String Name { get; }
 
     }
 }

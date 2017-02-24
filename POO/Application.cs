@@ -28,8 +28,6 @@ namespace TPCSharp
                 Console.WriteLine("4 : Nombre de Salarié");
                 Console.WriteLine("5 : Supprimer un salarié par matricule");
                 Console.WriteLine("6 : Quitter");
-                
-                
 
                 try
                 {
@@ -40,7 +38,22 @@ namespace TPCSharp
                     switch (choice)
                     {
                         case 1:
-                            AddSalarie();
+                            Console.WriteLine("1. Ajouter un commercial");
+                            Console.WriteLine("2. Ajouter un salarié classique");
+                            Console.Write("Entrez votre Choix : ");
+                            Int32 choiceSal = Convert.ToInt32(Console.ReadLine());
+                            switch (choiceSal)
+                            {
+                                case 1:
+                                    AddCommercial();
+                                    break;
+                                case 2:
+                                    AddSalarie();
+                                    break;
+                                default:
+                                    break;
+                            }
+                            
                             break;
                         case 2:
                             DisplayListSalarie();
@@ -68,7 +81,7 @@ namespace TPCSharp
                             
                             break;
                         case 4:
-                            Console.WriteLine("Nombre de salariés enregistrés :" + Salarie.Count);
+                            Console.WriteLine("Nombre de salariés enregistrés :" + GetNombreSalarie());
                             break;
                         case 5:
                             Boolean bbb = true;
@@ -112,21 +125,27 @@ namespace TPCSharp
             }
         }
 
-        public static void AddSalarie()
+        private static Int32 GetNombreSalarie()
         {
-            Salarie salarie = new Salarie();
-            Console.Write("Nom du Salarié : ");
-            salarie.Name = Console.ReadLine();
+            return listSalarie.Count;
+        }
 
+        public static void AddCommercial()
+        {
+
+            Console.Write("Nom du Cmmercial : ");
+            String name = Console.ReadLine();
+
+            Commercial commercial = new Commercial(name);
             Console.Write("Categorie : ");
 
-            salarie.Categorie = CheckCategory(Console.ReadLine());
+            commercial.Categorie = CheckInt(Console.ReadLine());
 
             Console.Write("Service : ");
-            salarie.Service = CheckService(Console.ReadLine());
+            commercial.Service = CheckInt(Console.ReadLine());
 
             Console.Write("Salaire(€): ");
-            salarie.Salaire = CheckSalaire(Console.ReadLine());
+            commercial.Salaire = CheckDouble(Console.ReadLine());
 
             Boolean flag = true;
             while (flag)
@@ -134,9 +153,46 @@ namespace TPCSharp
                 Console.Write("Email @ : ");
                 if (Program.checkEmail(Console.ReadLine())) flag = false;
             }
+
+            Console.Write("ChiffreAffaire: ");
+            commercial.ChiffreAffaire = CheckDouble(Console.ReadLine());
+
+            Console.Write("Commission (%): ");
+            commercial.Commission = CheckInt(Console.ReadLine());
+
+
+            listSalarie.Add(commercial);
+            Console.WriteLine("");
+            Console.WriteLine("Le commercial à été ajouté ! ");
+            Console.WriteLine("");
+        }
+
+        public static void AddSalarie()
+        {
             
+            Console.Write("Nom du Salarié : ");
+            String name = Console.ReadLine();
+
+            Salarie salarie = new Salarie(name);
+            Console.Write("Categorie : ");
+
+            salarie.Categorie = CheckInt(Console.ReadLine());
+
+            Console.Write("Service : ");
+            salarie.Service = CheckInt(Console.ReadLine());
+
+            Console.Write("Salaire(€): ");
+            salarie.Salaire = CheckDouble(Console.ReadLine());
+
+            Boolean flag = true;
+            while (flag)
+            {
+                Console.Write("Email @ : ");
+                if (Program.checkEmail(Console.ReadLine())) flag = false;
+            }  
 
             listSalarie.Add(salarie);
+
             Console.WriteLine("");
             Console.WriteLine("Le salarié à été ajouté ! ");
             Console.WriteLine("");
@@ -147,50 +203,39 @@ namespace TPCSharp
             if (listSalarie.Count == 0)
             {
                 Console.WriteLine("Pas de salarié !! ");
+                Console.WriteLine("");
             }
             else
             {
                 foreach (Salarie sal in listSalarie)
                 {
-                    DisplaySalarie(sal);
+                    if(sal is Commercial)
+                    {
+                        Commercial c = (Commercial)sal;
+                        DisplayCommercial(c);
+                    }
+                    else { 
+                        DisplaySalarie(sal);
+                    }
                 }
             }
         }
 
         private static void DisplaySalarie(Salarie s)
         {
-            Console.Write("Name : "+ s.Name + "\n\tMatricule : " + s.Matricule + "\n\tCategorie : " 
-                        + s.Categorie + "\n\tService : " + s.Service +"\n\tSalaire: " + s.Salaire + "\n\tEmail : " + s.Email);
+            Console.Write(s.ToString());
+            Console.WriteLine("");
         }
 
-        private static int CheckCategory(String cat) 
+        private static void DisplayCommercial(Commercial c)
         {
-            bool flag = true;
-            int c = -1;
-            while (flag)
-            {
-                try
-                {
-                    c = Convert.ToInt32(cat);
-                    flag = false;
-                }
-                catch (FormatException)
-                {
-                    PrintErrorMessage();
-                    cat = Console.ReadLine();
-                }
-                catch (OverflowException)
-                {
-                    PrintErrorMessage(); ;
-                    cat = Console.ReadLine();
-                }
-            }
-
-            return c;
-
+            Console.Write(c.ToString());
+            Console.WriteLine("");
         }
 
-        private static int CheckService(String serv) 
+
+
+        private static int CheckInt(String serv) 
         {
             bool flag = true;
             int c = -1;
@@ -217,7 +262,7 @@ namespace TPCSharp
             return c;
         }
 
-        private static Double CheckSalaire(String sal)
+        private static Double CheckDouble(String sal)
         {
             bool flag = true;
             double c = -1;
