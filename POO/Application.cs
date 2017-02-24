@@ -29,6 +29,7 @@ namespace TPCSharp
                 Console.WriteLine("4 : Nombre de Salarié");
                 Console.WriteLine("5 : Supprimer un salarié par matricule");
                 Console.WriteLine("6 : Quitter");
+                Console.WriteLine("");
 
                 try
                 {
@@ -126,6 +127,7 @@ namespace TPCSharp
             }
         }
 
+        
         private static Int32 GetNombreSalarie()
         {
             return listSalarie.Count;
@@ -134,14 +136,35 @@ namespace TPCSharp
         public static void AddCommercial()
         {
 
-            Console.Write("Nom du Cmmercial : ");
+            Console.Write("Nom du Commercial : ");
             String name = Console.ReadLine();
 
             Commercial commercial = new Commercial(name);
-            Console.Write("Categorie : ");
+            Console.WriteLine("Catégorie : ");
+            Console.WriteLine("1. RH");
+            Console.WriteLine("2. Compta");
+            Console.WriteLine("3. Admin");
+            Console.WriteLine("4. Info");
 
-            commercial.Categorie = CheckInt(Console.ReadLine());
-
+            switch (CheckInt(Console.ReadLine()))
+            {
+                case 1:
+                    commercial.Categorie = (Int32)Salarie.Categories.RH;
+                    break;
+                case 2:
+                    commercial.Categorie = (Int32)Salarie.Categories.Compta;
+                    break;
+                case 3:
+                    commercial.Categorie = (Int32)Salarie.Categories.Admin;
+                    break;
+                case 4:
+                    commercial.Categorie = (Int32)Salarie.Categories.Info;
+                    break;
+                default:
+                    
+                    break;
+            }
+           
             Console.Write("Service : ");
             commercial.Service = CheckInt(Console.ReadLine());
 
@@ -152,7 +175,12 @@ namespace TPCSharp
             while (flag)
             {
                 Console.Write("Email @ : ");
-                if (Program.checkEmail(Console.ReadLine())) flag = false;
+                String email = Console.ReadLine();
+                if (Program.checkEmail(email))
+                {
+                    commercial.Email = email;
+                    flag = false;
+                }
             }
 
             Console.Write("ChiffreAffaire: ");
@@ -168,6 +196,7 @@ namespace TPCSharp
             Console.WriteLine("");
         }
 
+        
         public static void AddSalarie()
         {
             
@@ -175,9 +204,30 @@ namespace TPCSharp
             String name = Console.ReadLine();
 
             Salarie salarie = new Salarie(name);
-            Console.Write("Categorie : ");
+            Console.WriteLine("Catégorie : ");
+            Console.WriteLine("1. RH");
+            Console.WriteLine("2. Compta");
+            Console.WriteLine("3. Admin");
+            Console.WriteLine("4. Info");
 
-            salarie.Categorie = CheckInt(Console.ReadLine());
+            switch (CheckInt(Console.ReadLine()))
+            {
+                case 1:
+                    salarie.Categorie = (Int32)Salarie.Categories.RH;
+                    break;
+                case 2:
+                    salarie.Categorie = (Int32)Salarie.Categories.Compta;
+                    break;
+                case 3:
+                    salarie.Categorie = (Int32)Salarie.Categories.Admin;
+                    break;
+                case 4:
+                    salarie.Categorie = (Int32)Salarie.Categories.Info;
+                    break;
+                default:
+
+                    break;
+            }
 
             Console.Write("Service : ");
             salarie.Service = CheckInt(Console.ReadLine());
@@ -189,7 +239,12 @@ namespace TPCSharp
             while (flag)
             {
                 Console.Write("Email @ : ");
-                if (Program.checkEmail(Console.ReadLine())) flag = false;
+                String email = Console.ReadLine();
+                if (Program.checkEmail(email))
+                {
+                    salarie.Email = email;
+                    flag = false;
+                }
             }  
 
             listSalarie.Add(salarie);
@@ -221,10 +276,9 @@ namespace TPCSharp
         {
             Console.Write(s.ToString());
             Console.WriteLine("");
+
         }
-
-
-
+        
 
         private static int CheckInt(String serv) 
         {
