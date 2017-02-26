@@ -127,7 +127,10 @@ namespace TPCSharp
             }
         }
 
-        
+        /// <summary>
+        /// Retourne le nombre de salariés actuels dans la liste
+        /// </summary>
+        /// <returns>Int32</returns>
         private static Int32 GetNombreSalarie()
         {
             return listSalarie.Count;
@@ -197,7 +200,9 @@ namespace TPCSharp
             Console.WriteLine("");
         }
 
-        
+        /// <summary>
+        /// Ajoute un salarié à la liste
+        /// </summary>
         public static void AddSalarie()
         {
             
@@ -255,6 +260,9 @@ namespace TPCSharp
             Console.WriteLine("");
         }
 
+        /// <summary>
+        /// Affiche la liste total des salariés présent dans la liste
+        /// </summary>
         private static void DisplayListSalarie()
         {
             if (listSalarie.Count == 0)
@@ -273,6 +281,10 @@ namespace TPCSharp
             }
         }
 
+        /// <summary>
+        /// Affiche un salarié 
+        /// </summary>
+        /// <param name="s">Prend comme argument un salarié à afficher</param>
         private static void DisplaySalarie(Salarie s)
         {
             Console.Write(s.ToString());
@@ -281,7 +293,13 @@ namespace TPCSharp
         }
         
 
-        private static int CheckInt(String serv) 
+        /// <summary>
+        /// Boucle pour vérifier si le paramètre (String) est convertible en Int32
+        /// 
+        /// </summary>
+        /// <param name="serv"</param>
+        /// <returns></returns>
+        private static Int32 CheckInt(String serv) 
         {
             bool flag = true;
             int c = -1;
@@ -308,6 +326,12 @@ namespace TPCSharp
             return c;
         }
 
+        /// <summary>
+        /// Boucle pour vérifier si le paramètre (String) est convertible en Int32
+        /// 
+        /// </summary>
+        /// <param name="serv"</param>
+        /// <returns></returns>
         private static Double CheckDouble(String sal)
         {
             bool flag = true;
@@ -335,6 +359,10 @@ namespace TPCSharp
             return c;
         }
 
+        /// <summary>
+        /// Recherche un salarié dans la liste par matricule
+        /// </summary>
+        /// <param name="mat">Matricule Salarié</param>
         private static void findSalarieByMatricule(Int32 mat)
         {
             Salarie s = null;
@@ -355,13 +383,20 @@ namespace TPCSharp
             }
         }
 
-
+        /// <summary>
+        /// Affiche une erreur générique
+        /// </summary>
         private static void PrintErrorMessage()
         {
             Console.WriteLine("Erreur dans la saisie : ");
             Console.WriteLine("Entrer une nouvelle valeur :\n ");
         }
 
+        /// <summary>
+        /// Supprime un salarié avec le matricule
+        /// 
+        /// </summary>
+        /// <param name="mat">Matricule</param>
         private static void DeleteSalarieByMatricule(Int32 mat)
         {
             Boolean isDeleted = false;
