@@ -8,7 +8,7 @@ namespace TPCSharp
 {
     public abstract class Personne
     {
-        public abstract String Name { get; }
+        public abstract String Name { get;  }
 
         protected static int Count { get; set; } = 0;
 
