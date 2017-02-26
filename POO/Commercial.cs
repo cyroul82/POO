@@ -14,14 +14,12 @@ namespace TPCSharp
         public Commercial (String name) : base (name){
             ChiffreAffaire = 0;
             Commission = 0;
-            Salarie.Count++;
          }
 
         public Commercial(String name, Double chiffreAffaire, Int32 commission) : base(name)
         {
             this.ChiffreAffaire = chiffreAffaire;
             this.Commission = commission;
-            Salarie.Count++;
         }
 
 

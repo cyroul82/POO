@@ -176,6 +176,7 @@ namespace TPCSharp
             {
                 Console.Write("Email @ : ");
                 String email = Console.ReadLine();
+                
                 if (Program.checkEmail(email))
                 {
                     commercial.Email = email;

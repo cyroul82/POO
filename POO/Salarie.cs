@@ -8,9 +8,7 @@ namespace TPCSharp
 {
     public class Salarie : Personne
     {
-
-        int a=0;
-        public static int Count { get; set; } = 0;
+        
 
         public int Categorie { get; set; }
 
@@ -24,9 +22,6 @@ namespace TPCSharp
 
         public String Email { get; set; }
 
-        
-
-
         public enum Categories
         {
             RH,
@@ -38,7 +33,8 @@ namespace TPCSharp
         public Salarie(String name)
         {
             Name = name;
-            Count++;
+            Matricule = Count;
+            Personne.Count++;
            
         }
 
@@ -50,7 +46,7 @@ namespace TPCSharp
             Salaire = sal;
             Matricule = Count;
             Email = email;
-            Count++;
+            Personne.Count++;
         }
 
 

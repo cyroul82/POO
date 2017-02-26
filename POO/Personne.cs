@@ -10,5 +10,7 @@ namespace TPCSharp
     {
         public abstract String Name { get; }
 
+        protected static int Count { get; set; } = 0;
+
     }
 }
