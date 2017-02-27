@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="Commercial.cs" />
+    <Compile Include="IMyInterface.cs" />
     <Compile Include="IRemunerable.cs" />
     <Compile Include="Personne.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
