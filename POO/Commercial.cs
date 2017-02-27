@@ -11,17 +11,15 @@ namespace TPCSharp
         public Double ChiffreAffaire { get; set; }
         public Int32 Commission { get; set; }
 
-        public Commercial (String name) : base (name){
-            ChiffreAffaire = 0;
-            Commission = 0;
+        public Commercial (String name, Int32 type) : base (name, type){
+            
          }
 
-        public Commercial(String name, Double chiffreAffaire, Int32 commission) : base(name)
+        public Commercial(String name, Int32 type, Double chiffreAffaire, Int32 commission) : base(name, type)
         {
             this.ChiffreAffaire = chiffreAffaire;
             this.Commission = commission;
         }
-
 
         public override Double CalculerSalaire()
         {

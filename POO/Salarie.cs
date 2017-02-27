@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TPCSharp
 {
-    public class Salarie : Personne, IRemunerable, IComparable
+    public abstract class Salarie : Personne, IRemunerable, IComparable
     {
 
         public int Categorie { get; set; }
@@ -19,6 +19,8 @@ namespace TPCSharp
 
         public String Email { get; set; }
 
+        public Int32 Type { get; set; }
+
 
         public enum Categories
         {
@@ -28,10 +30,17 @@ namespace TPCSharp
             Info
         }
 
-        public Salarie(String name)
+        public enum Salaries
+        {
+            Commercial,
+            Technicien
+        }
+
+        public Salarie(String name, Int32 type)
         {
             base.Name = name;
             Matricule = Count;
+            this.Type = type;
             Personne.Count++;
            
         }
