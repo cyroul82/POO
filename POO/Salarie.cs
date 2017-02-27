@@ -19,6 +19,7 @@ namespace TPCSharp
 
         public String Email { get; set; }
 
+
         public enum Categories
         {
             RH,
@@ -29,7 +30,7 @@ namespace TPCSharp
 
         public Salarie(String name)
         {
-            Name = name;
+            base.Name = name;
             Matricule = Count;
             Personne.Count++;
            
@@ -39,7 +40,7 @@ namespace TPCSharp
         {
             Categorie = catg;
             Service = serv;
-            Name = nomSal;
+            base.Name = nomSal;
             Salaire = sal;
             Matricule = Count;
             Email = email;
