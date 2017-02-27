@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace TPCSharp
 {
-     public abstract class Personne
+    interface IRemunerable
     {
-        public abstract String Name { get; protected set; }
-
-        protected static int Count { get; set; } = 0;
-
+        Double CalculerSalaire();
     }
 }

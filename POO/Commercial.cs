@@ -23,18 +23,16 @@ namespace TPCSharp
         }
 
 
-
         public override Double CalculerSalaire()
         {
-            return  ((ChiffreAffaire * Commission) / 100 + Salaire);
-           
-       }
+            return ((ChiffreAffaire * Commission) / 100 + Salaire);
+        }
 
         public override string ToString()
         {
             return ("Commercial :\nName : " + Name + "\n\tMatricule : " + Matricule + "\n\tCategorie : "
                         + Categorie + "\n\tService : " + Service + "\n\tSalaire: " + Salaire + "\n\tEmail : " + Email
-                        + "\n\tChiffre d'affaire : " + ChiffreAffaire + "\n\tCommission : " + Commission + "\n\tSalaire Total : " + CalculerSalaire());
+                        + "\n\tChiffre d'affaire : " + ChiffreAffaire + "\n\tCommission : " + Commission + "\n\tSalaire Total : "  + CalculerSalaire());
         }
 
 

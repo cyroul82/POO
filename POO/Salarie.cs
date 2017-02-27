@@ -6,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace TPCSharp
 {
-    public class Salarie : Personne
+    public class Salarie : Personne, IRemunerable, IComparable
     {
-        
 
         public int Categorie { get; set; }
 
         public int Matricule { get; private set; }
 
         public int Service { get; set; }
-
-        public override String Name { get; }
 
         public Double Salaire { get; set; }
 
@@ -50,12 +47,6 @@ namespace TPCSharp
         }
 
 
-        public virtual Double CalculerSalaire()
-        {
-            return Salaire;
-        }
-
-
         public override bool Equals(object obj)
         {
             if (obj is Salarie)
@@ -74,6 +65,16 @@ namespace TPCSharp
         {
             return ("Salarié :\nName : " + Name + "\n\tMatricule : " + Matricule + "\n\tCategorie : "
                         + Categorie + "\n\tService : " + Service + "\n\tSalaire: " + Salaire + "\n\tEmail : " + Email);
+        }
+
+        public virtual Double  CalculerSalaire()
+        {
+            return Salaire;
+        }
+
+        public int CompareTo(object obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }
