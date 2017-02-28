@@ -56,7 +56,6 @@ namespace TPCSharp
             Personne.Count++;
         }
 
-
         public override bool Equals(object obj)
         {
             if (obj is Salarie)
@@ -86,5 +85,7 @@ namespace TPCSharp
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

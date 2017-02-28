@@ -1,0 +1,48 @@
+﻿<Window x:Class="GUI.AddSalarieDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        Title="AddSalarieDialog" Height="231.933" Width="300" ResizeMode="NoResize"
+        Background="#3F587F">
+    <Grid Margin="0,0,0,1">
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0 10 0 0" Text="Ajouter un salarié" VerticalAlignment="Top"/>
+        <Label x:Name="nameLabel" Content="Nom : " HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="35,65,0,0"/>
+        <ComboBox x:Name="typeComboBox" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Margin="90,39,0,0">
+            <ComboBoxItem Content="Commercial"/>
+            <ComboBoxItem Content="Technicien"/>
+        </ComboBox>
+        <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="90,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="emailLabel" Content="Email :" HorizontalAlignment="Left" Margin="35,91,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="emailTextBox" HorizontalAlignment="Left" Height="23" Margin="90,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="salaryLabel" Content="Salaire : " HorizontalAlignment="Left" Margin="35,119,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="salaireTextBox" HorizontalAlignment="Left" Height="23" Margin="90,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="typeLabel" Content="Type : " HorizontalAlignment="Left" Margin="35,39,0,0" VerticalAlignment="Top"/>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0 0 0 20">
+            <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" />
+            <Separator Width="20" Background="Transparent"></Separator>
+            <Button x:Name="okButton" Content="OK" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="75" Click="okButton_Click"/>
+        </StackPanel>
+        
+
+    </Grid>
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#7EB0FF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+    </Window.Resources>
+</Window>
+
+

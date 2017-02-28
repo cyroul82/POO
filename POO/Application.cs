@@ -17,6 +17,7 @@ namespace TPCSharp
 
         static void Main(string[] args)
         {
+
             Boolean b = true;
             while (b)
             {
@@ -222,10 +223,7 @@ namespace TPCSharp
                                       new XElement("Categorie", comm.Categorie),
                                       new XElement("Service", comm.Service),
                                       new XElement("Email", comm.Email)
-
                                       ));
-
-
 
                     xEle.Save("C:\\Users\\Public\\Documents\\commercial.xml");
                 }
