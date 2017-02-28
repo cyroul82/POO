@@ -303,8 +303,6 @@ namespace TPCSharp
         }
 
 
-
-
         /// <summary>
         /// Affiche la liste total des salariés présent dans la liste
         /// </summary>
