@@ -12,5 +12,16 @@ namespace TPCSharp
         {
 
         }
+
+        public Technicien(string name, Int32 type, Int32 mat) : base(name, type, mat)
+        {
+
+        }
+
+        public override String ToString()
+        {
+            return ("Technicien :\nName : " + Name + "\n\tMatricule : " + Matricule + "\n\tCategorie : "
+                        + Categorie + "\n\tService : " + Service + "\n\tSalaire: " + Salaire + "\n\tEmail : " + Email);
+        }
     }
 }

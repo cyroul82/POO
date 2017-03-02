@@ -14,6 +14,10 @@ namespace TPCSharp
         public Commercial (String name, Int32 type) : base (name, type){
             
          }
+        public Commercial(String name, Int32 type, Int32 mat) : base(name, type, mat)
+        {
+
+        }
 
         public Commercial(String name, Int32 type, Double chiffreAffaire, Int32 commission) : base(name, type)
         {

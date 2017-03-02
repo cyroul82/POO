@@ -21,7 +21,6 @@ namespace TPCSharp
 
         public Int32 Type { get; set; }
 
-
         public enum Categories
         {
             RH,
@@ -36,13 +35,26 @@ namespace TPCSharp
             Technicien
         }
 
+        public String s = "salut";
+
         public Salarie(String name, Int32 type)
         {
             base.Name = name;
             Matricule = Count;
             this.Type = type;
             Personne.Count++;
+
            
+
+        }
+
+        public Salarie(String name, Int32 type, Int32 matricule)
+        {
+            base.Name = name;
+            this.Matricule = matricule;
+            this.Type = type;
+           
+
         }
 
         public Salarie(int catg, int serv, string nomSal, double sal, String email)
