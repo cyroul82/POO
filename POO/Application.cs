@@ -10,13 +10,10 @@ namespace TPCSharp
 {
     class Application
     {
-
         private static List<Salarie> listSalarie = new List<Salarie>();
         private static List<Commercial> listCommercial = new List<Commercial>();
         private static List<Technicien> listTechnicien = new List<Technicien>();
         private static SortedDictionary<Int32, Salarie> listSortedSalarie = new SortedDictionary<Int32, Salarie>();
-
-
 
         static void Main(string[] args)
         {
@@ -35,20 +32,22 @@ namespace TPCSharp
                                                     (String)x.Element("Email")
                                                 )
                             ).ToList();
+
+                foreach(Commercial c in listCommercial)
+                {
+                    listSortedSalarie.Add(c.Matricule, c);
+                    listSalarie.Add(c);
+                }
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error file : " + e.Message);
             }
             
-
-
             Boolean b = true;
             while (b)
             {
-
-
-
                 Console.WriteLine("Bonjour {0}", Environment.UserName);
                 Console.WriteLine("");
                 Console.WriteLine("Que faire : ?");
@@ -313,7 +312,8 @@ namespace TPCSharp
                                       new XElement("Categorie", comm.Categorie),
                                       new XElement("Service", comm.Service),
                                       new XElement("Email", comm.Email)
-                                      ));
+                                      )
+                                      );
 
                     xEle.Save("C:\\Users\\Public\\Documents\\commercial.xml");
                 }
@@ -363,8 +363,6 @@ namespace TPCSharp
             Console.WriteLine("");
             Console.WriteLine("Ajouté ! ");
             Console.WriteLine("");
-
-
 
             try
             {
