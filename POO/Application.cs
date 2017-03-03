@@ -14,14 +14,40 @@ namespace TPCSharp
         private static List<Salarie> listSalarie = new List<Salarie>();
         private static List<Commercial> listCommercial = new List<Commercial>();
         private static List<Technicien> listTechnicien = new List<Technicien>();
-        private static SortedDictionary<Int32,Salarie> listSortedSalarie= new SortedDictionary<Int32, Salarie>();
+        private static SortedDictionary<Int32, Salarie> listSortedSalarie = new SortedDictionary<Int32, Salarie>();
+
+
 
         static void Main(string[] args)
         {
+            try
+            {
+                XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\commercial.xml");
+                listCommercial = doc.Root.Elements("Commercial")
+                    .Select(x =>
+
+                                            new Commercial(
+                                                    (String)x.Element("Name"),
+                                                    (Int32)x.Attribute("Type"),
+                                                    (Int32)x.Attribute("Matricule"),
+                                                    (Int32)x.Element("Categorie"),
+                                                    (Int32)x.Element("Service"),
+                                                    (String)x.Element("Email")
+                                                )
+                            ).ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error file : " + e.Message);
+            }
             
+
+
             Boolean b = true;
             while (b)
             {
+
+
 
                 Console.WriteLine("Bonjour {0}", Environment.UserName);
                 Console.WriteLine("");
@@ -153,6 +179,10 @@ namespace TPCSharp
                         case 7:
                             DisplaySortedDictionnaryList();
                             break;
+
+                        case 8:
+                            ClearAllList();
+                            break;
                         default:
                             break;
                     }
@@ -170,7 +200,7 @@ namespace TPCSharp
             }
         }
 
-        private void ClearAllList()
+        private static void ClearAllList()
         {
             listCommercial.Clear();
             listTechnicien.Clear();
@@ -277,6 +307,7 @@ namespace TPCSharp
                     var xEle = new XElement("Commercials",
                         from comm in listCommercial
                         select new XElement("Commercial",
+                                    new XAttribute("Type", comm.Type),
                                     new XAttribute("Matricule", comm.Matricule),
                                       new XElement("Name", comm.Name),
                                       new XElement("Categorie", comm.Categorie),
@@ -341,7 +372,7 @@ namespace TPCSharp
                     from sala in listSalarie
                     select new XElement("Salarie",
                                 new XAttribute("Type", sala.Type),
-                                new XAttribute("Matricule", sala.Matricule),
+                                  new XElement("Matricule", sala.Matricule),
                                   new XElement("Name", sala.Name),
                                   new XElement("Categorie", sala.Categorie),
                                   new XElement("Service", sala.Service),
@@ -441,6 +472,7 @@ namespace TPCSharp
                     var xEle = new XElement("Commercials",
                         from comm in listCommercial
                         select new XElement("Commercial",
+                                    new XAttribute("Type", comm.Type),
                                     new XAttribute("Matricule", comm.Matricule),
                                       new XElement("Name", comm.Name),
                                       new XElement("Categorie", comm.Categorie),
@@ -549,9 +581,27 @@ namespace TPCSharp
             }
             else
             {
+                listSalarie.Sort();
+                listSalarie.Reverse();
                 foreach (Salarie sal in listSalarie)
                 {
                     
+                    DisplaySalarie(sal);
+
+                }
+            }
+
+            if (listCommercial.Count == 0)
+            {
+                Console.WriteLine("Pas de Commercial !! ");
+                Console.WriteLine("");
+            }
+            else
+            {
+                
+                foreach (Commercial sal in listCommercial)
+                {
+
                     DisplaySalarie(sal);
 
                 }

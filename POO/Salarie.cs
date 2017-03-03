@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TPCSharp
 {
-    public abstract class Salarie : Personne, IRemunerable, IComparable
+    public abstract class Salarie : Personne, IRemunerable, IComparable<Salarie>
     {
 
         public int Categorie { get; set; }
@@ -57,12 +58,13 @@ namespace TPCSharp
 
         }
 
-        public Salarie(int catg, int serv, string nomSal, double sal, String email)
+        public Salarie(String name, Int32 type, Int32 matricule, int catg, int serv, String email)
         {
+            base.Name = name;
+            this.Matricule = matricule;
+            this.Type = type;
             Categorie = catg;
             Service = serv;
-            base.Name = nomSal;
-            Salaire = sal;
             Matricule = Count;
             Email = email;
             Personne.Count++;
@@ -93,11 +95,9 @@ namespace TPCSharp
             return Salaire;
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(Salarie other)
         {
-            throw new NotImplementedException();
+            return Salaire.CompareTo(other.Salaire);
         }
-
-
     }
 }
