@@ -10,20 +10,33 @@ namespace TPCSharp
 {
     class Application
     {
-        private static List<Salarie> listSalarie = new List<Salarie>();
-        private static List<Commercial> listCommercial = new List<Commercial>();
+        private static Dictionary<Int32,Commercial> dictionnaryCommercial = new Dictionary<Int32, Commercial>();
         private static List<Technicien> listTechnicien = new List<Technicien>();
-        private static SortedDictionary<Int32, Salarie> listSortedSalarie = new SortedDictionary<Int32, Salarie>();
 
         static void Main(string[] args)
         {
             try
             {
-                XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\commercial.xml");
-                listCommercial = doc.Root.Elements("Commercial")
-                    .Select(x =>
+                XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\list.xml");
+                XElement xl = doc.Root;
+                IEnumerable<XElement> ieComm = xl.Elements("List").Elements("Commercial");
+                IEnumerable<XElement> ieTech = xl.Elements("List").Elements("Technicien");
 
+                dictionnaryCommercial = ieComm
+                    .Select(x =>
                                             new Commercial(
+                                                    (String)x.Element("Name"),
+                                                    (Int32)x.Attribute("Type"),
+                                                    (Int32)x.Attribute("Matricule"),
+                                                    (Int32)x.Element("Categorie"),
+                                                    (Int32)x.Element("Service"),
+                                                    (String)x.Element("Email")
+                                                )
+                            ).ToDictionary(c => c.Matricule);
+
+                listTechnicien = ieTech
+                    .Select(x =>
+                                            new Technicien(
                                                     (String)x.Element("Name"),
                                                     (Int32)x.Attribute("Type"),
                                                     (Int32)x.Attribute("Matricule"),
@@ -33,18 +46,14 @@ namespace TPCSharp
                                                 )
                             ).ToList();
 
-                foreach(Commercial c in listCommercial)
-                {
-                    listSortedSalarie.Add(c.Matricule, c);
-                    listSalarie.Add(c);
-                }
-                
+
+
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error file : " + e.Message);
             }
-            
+
             Boolean b = true;
             while (b)
             {
@@ -57,7 +66,6 @@ namespace TPCSharp
                 Console.WriteLine("4 : Nombre de Salarié");
                 Console.WriteLine("5 : Supprimer un salarié par matricule");
                 Console.WriteLine("6 : Quitter");
-                Console.WriteLine("7 : Display SortedDictionnaryList");
                 Console.WriteLine("8 : Clear all lists !!!");
                 Console.WriteLine("");
 
@@ -172,11 +180,12 @@ namespace TPCSharp
                             
                             break;
                         case 6:
+                            SaveToFile();
                             b = false;
                             break;
 
                         case 7:
-                            DisplaySortedDictionnaryList();
+
                             break;
 
                         case 8:
@@ -199,21 +208,57 @@ namespace TPCSharp
             }
         }
 
+        /// <summary>
+        /// Clear the Commercial and Technician lists
+        /// </summary>
         private static void ClearAllList()
         {
-            listCommercial.Clear();
             listTechnicien.Clear();
-            listSalarie.Clear();
-            listSortedSalarie.Clear();
+            dictionnaryCommercial.Clear();
         }
 
-        private static void DisplaySortedDictionnaryList()
-        {
-            foreach (KeyValuePair<Int32, Salarie> s in listSortedSalarie)
+        /// <summary>
+        /// Save the commercial List and the Technican List into a XML file "list.xml"
+        /// <para>Path of the file : "C:\Users\Public\Documents\list.xml"</para>
+        /// </summary>
+        private static void SaveToFile()
+        {   
+            try
             {
-                Console.WriteLine("Key : " + s.Key + " Salarie : " + s.Value.Name);
+                //Save Commercial
+                XElement xEle = new XElement("List");
+                
+                xEle.Add(
+                    from comm in dictionnaryCommercial
+                    select new XElement("Commercial",
+                                new XAttribute("Type", comm.Value.Type),
+                                new XAttribute("Matricule", comm.Key),
+                                  new XElement("Name", comm.Value.Name),
+                                  new XElement("Categorie", comm.Value.Categorie),
+                                  new XElement("Service", comm.Value.Service),
+                                  new XElement("Email", comm.Value.Email)
+                                  )
+                                  );
+              
+                //Save Technicien
+                xEle.Add(
+                    from tech in listTechnicien
+                    select new XElement("Technicien",
+                                new XAttribute("Type", tech.Type),
+                                new XAttribute("Matricule", tech.Matricule),
+                                  new XElement("Name", tech.Name),
+                                  new XElement("Categorie", tech.Categorie),
+                                  new XElement("Service", tech.Service),
+                                  new XElement("Email", tech.Email)
+                                  )
+                                  );
+
+                xEle.Save("C:\\Users\\Public\\Documents\\list.xml");
             }
-     
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>
@@ -222,7 +267,7 @@ namespace TPCSharp
         /// <returns>Int32</returns>
         private static Int32 GetNombreSalarie()
         {
-            return listSalarie.Count;
+            return dictionnaryCommercial.Count + listTechnicien.Count;
         }
 
         public static void AddEmployee(Int32 typeSalarie)
@@ -297,31 +342,7 @@ namespace TPCSharp
                 commercial.Salaire = sal;
                 commercial.ChiffreAffaire = ca;
                 commercial.Commission = com;
-                listCommercial.Add(commercial);
-                listSalarie.Add(commercial);
-                listSortedSalarie.Add(commercial.Matricule, commercial);
-
-                try
-                {
-                    var xEle = new XElement("Commercials",
-                        from comm in listCommercial
-                        select new XElement("Commercial",
-                                    new XAttribute("Type", comm.Type),
-                                    new XAttribute("Matricule", comm.Matricule),
-                                      new XElement("Name", comm.Name),
-                                      new XElement("Categorie", comm.Categorie),
-                                      new XElement("Service", comm.Service),
-                                      new XElement("Email", comm.Email)
-                                      )
-                                      );
-
-                    xEle.Save("C:\\Users\\Public\\Documents\\commercial.xml");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
+                dictionnaryCommercial.Add(commercial.Matricule, commercial);
 
             }
             else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
@@ -334,58 +355,12 @@ namespace TPCSharp
 
 
                 listTechnicien.Add(technicien);
-                listSalarie.Add(technicien);
-                listSortedSalarie.Add(technicien.Matricule, technicien);
-                try
-                {
-                    var xEle = new XElement("Techniciens",
-                        from tech in listTechnicien
-                        select new XElement("Technicien",
-                                    new XAttribute("Matricule", tech.Matricule),
-                                      new XElement("Name", tech.Name),
-                                      new XElement("Categorie", tech.Categorie),
-                                      new XElement("Service", tech.Service),
-                                      new XElement("Email", tech.Email)
-
-                                      ));
-
-
-
-                    xEle.Save("C:\\Users\\Public\\Documents\\technicien.xml");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
             }
 
             Console.ReadLine();
             Console.WriteLine("");
             Console.WriteLine("Ajouté ! ");
             Console.WriteLine("");
-
-            try
-            {
-                var xEle = new XElement("Salariés",
-                    from sala in listSalarie
-                    select new XElement("Salarie",
-                                new XAttribute("Type", sala.Type),
-                                  new XElement("Matricule", sala.Matricule),
-                                  new XElement("Name", sala.Name),
-                                  new XElement("Categorie", sala.Categorie),
-                                  new XElement("Service", sala.Service),
-                                  new XElement("Email", sala.Email)
-
-                                  ));
-
-
-
-                xEle.Save("C:\\Users\\Public\\Documents\\salariés.xml");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
 
         }
 
@@ -461,30 +436,8 @@ namespace TPCSharp
                 commercial.Salaire = sal;
                 commercial.ChiffreAffaire = ca;
                 commercial.Commission = com;
-                listCommercial.Add(commercial);
-                listSalarie.Add(commercial);
-                listSortedSalarie.Add(commercial.Matricule, commercial);
 
-                try
-                {
-                    var xEle = new XElement("Commercials",
-                        from comm in listCommercial
-                        select new XElement("Commercial",
-                                    new XAttribute("Type", comm.Type),
-                                    new XAttribute("Matricule", comm.Matricule),
-                                      new XElement("Name", comm.Name),
-                                      new XElement("Categorie", comm.Categorie),
-                                      new XElement("Service", comm.Service),
-                                      new XElement("Email", comm.Email)
-                                      ));
-
-                    xEle.Save("C:\\Users\\Public\\Documents\\commercial.xml");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
+                dictionnaryCommercial.Add(commercial.Matricule, commercial);
 
             }
             else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
@@ -497,72 +450,19 @@ namespace TPCSharp
 
 
                 listTechnicien.Add(technicien);
-                listSalarie.Add(technicien);
-                listSortedSalarie.Add(technicien.Matricule, technicien);
-                try
-                {
-                    var xEle = new XElement("Techniciens",
-                        from tech in listTechnicien
-                        select new XElement("Technicien",
-                                    new XAttribute("Matricule", tech.Matricule),
-                                      new XElement("Name", tech.Name),
-                                      new XElement("Categorie", tech.Categorie),
-                                      new XElement("Service", tech.Service),
-                                      new XElement("Email", tech.Email)
-
-                                      ));
-
-
-
-                    xEle.Save("C:\\Users\\Public\\Documents\\technicien.xml");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
             }
 
             Console.ReadLine();
             Console.WriteLine("");
             Console.WriteLine("Ajouté ! ");
             Console.WriteLine("");
-
-
-
-            try
-            {
-                var xEle = new XElement("Salariés",
-                    from sala in listSalarie
-                    select new XElement("Salarie",
-                                new XAttribute("Type", sala.Type),
-                                new XAttribute("Matricule", sala.Matricule),
-                                  new XElement("Name", sala.Name),
-                                  new XElement("Categorie", sala.Categorie),
-                                  new XElement("Service", sala.Service),
-                                  new XElement("Email", sala.Email)
-
-                                  ));
-
-
-
-                xEle.Save("C:\\Users\\Public\\Documents\\salariés.xml");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
         }
 
         public static bool IsMatriculeExist(Int32 matr)
         {
 
             Boolean flag = false;
-            foreach (KeyValuePair<Int32, Salarie> k in listSortedSalarie)
-            {
-                if (k.Key == matr) flag = true;
-                
-            }
+           
             return flag;
         }
 
@@ -572,24 +472,8 @@ namespace TPCSharp
         /// </summary>
         private static void DisplayListSalarie()
         {
-            if (listSalarie.Count == 0)
-            {
-                Console.WriteLine("Pas de salarié !! ");
-                Console.WriteLine("");
-            }
-            else
-            {
-                listSalarie.Sort();
-                listSalarie.Reverse();
-                foreach (Salarie sal in listSalarie)
-                {
-                    
-                    DisplaySalarie(sal);
 
-                }
-            }
-
-            if (listCommercial.Count == 0)
+            if (dictionnaryCommercial.Count == 0)
             {
                 Console.WriteLine("Pas de Commercial !! ");
                 Console.WriteLine("");
@@ -597,11 +481,21 @@ namespace TPCSharp
             else
             {
                 
-                foreach (Commercial sal in listCommercial)
+                foreach (KeyValuePair<Int32, Commercial> kpv in dictionnaryCommercial)
                 {
-
-                    DisplaySalarie(sal);
-
+                    DisplaySalarie(kpv);
+                }
+            }
+            if(listTechnicien.Count == 0)
+            {
+                Console.WriteLine("Pas de Technicien !! ");
+                Console.WriteLine("");
+            }
+            else
+            {
+                foreach(Technicien tech in listTechnicien)
+                {
+                    DisplaySalarie(tech);
                 }
             }
         }
@@ -610,13 +504,15 @@ namespace TPCSharp
         /// Affiche un salarié 
         /// </summary>
         /// <param name="s">Prend comme argument un salarié à afficher</param>
-        private static void DisplaySalarie(Salarie s)
+        private static void DisplaySalarie<T>(T t)
         {
-            Console.Write(s.ToString());
+            Console.Write(t.ToString());
             Console.WriteLine("");
 
         }
-        
+
+
+
 
         /// <summary>
         /// Boucle pour vérifier si le paramètre (String) est convertible en Int32
@@ -692,13 +588,22 @@ namespace TPCSharp
         {
             Salarie s = null;
             
-            foreach(Salarie sal in listSalarie)
+            foreach(KeyValuePair<Int32, Commercial> kvp in dictionnaryCommercial)
             {   
-                if(sal.Matricule == mat)
+                if(kvp.Key == mat)
                 {
-                    s = sal;
+                    s = kvp.Value;
                 }
             }
+            foreach(Technicien tech in listTechnicien)
+            {
+                if(tech.Matricule == mat)
+                {
+                    s = tech;
+                }
+            }
+
+
             if(s!= null)
             {
                 DisplaySalarie(s);
@@ -726,32 +631,32 @@ namespace TPCSharp
         private static void DeleteSalarieByMatricule(Int32 mat)
         {
             Boolean isDeleted = false;
-            for (int i=0; i <= listSalarie.Count-1; i++)
+            for (int i=0; i <= dictionnaryCommercial.Count-1; i++)
             {
-                Salarie s = listSalarie.ElementAt(i);
-                if(s.Matricule == mat)
+                KeyValuePair<Int32, Commercial> kvp = dictionnaryCommercial.ElementAt(i);
+                if(kvp.Key == mat)
                 {
-                    listSalarie.Remove(s);
-                    Console.WriteLine("Salarié : " + s.Name + " a été supprimé de la liste salarié !");
+                    dictionnaryCommercial.Remove(kvp.Key);
+                    Console.WriteLine("Salarié : " + kvp.Value.Name + " a été supprimé de la liste salarié !");
                     isDeleted = true;
                 }
             }
-
+            for (int i=0; i<=listTechnicien.Count-1; i++)
+            {
+                Technicien tech = listTechnicien.ElementAt(i);
+                if (tech.Matricule == mat)
+                {
+                    listTechnicien.Remove(tech);
+                    Console.WriteLine("Salarié : " + tech.Name + " a été supprimé de la liste salarié !");
+                }
+            }
             if (!isDeleted)
             {
                 Console.WriteLine("Le salarié avec ce matricule n'a pas pu être trouvé dans la liste salarié \n et par conséquent non supprimé ! \n Merci de vérifier son Matricule");
             }
 
 
-            if (listSortedSalarie.Remove(mat))
-            {
-                Console.WriteLine("le salarié a été supprimé du dictionnaire ");
-            }
-            else
-            {
-                Console.WriteLine("Salarié non supprimé du dictionnaire \n Vérifier le Matricule");
-            }
-
+         
 
         }
     }
