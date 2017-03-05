@@ -36,37 +36,16 @@ namespace TPCSharp
             Technicien
         }
 
-        public String s = "salut";
-
-        public Salarie(String name, Int32 type)
-        {
-            base.Name = name;
-            Matricule = Count;
-            this.Type = type;
-            Personne.Count++;
-
-           
-
-        }
-
-        public Salarie(String name, Int32 type, Int32 matricule)
-        {
-            base.Name = name;
-            this.Matricule = matricule;
-            this.Type = type;
-           
-
-        }
-
-        public Salarie(String name, Int32 type, Int32 matricule, int catg, int serv, String email)
+        public Salarie(String name, Int32 type, Int32 matricule, Int32 catg, Int32 serv, String email, Double salaire)
         {
             base.Name = name;
             this.Matricule = matricule;
             this.Type = type;
             Categorie = catg;
             Service = serv;
-            Matricule = Count;
+            Matricule = matricule;
             Email = email;
+            Salaire = salaire;
             Personne.Count++;
         }
 

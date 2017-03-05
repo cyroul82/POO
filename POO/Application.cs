@@ -10,44 +10,43 @@ namespace TPCSharp
 {
     class Application
     {
-        private static Dictionary<Int32,Commercial> dictionnaryCommercial = new Dictionary<Int32, Commercial>();
-        private static List<Technicien> listTechnicien = new List<Technicien>();
+        private static Dictionary<Int32, Commercial> dictionnaryCommercial = new Dictionary<Int32, Commercial>();
+        private static Dictionary<Int32, Technicien> listTechnicien = new Dictionary<Int32, Technicien>();
 
         static void Main(string[] args)
         {
             try
             {
                 XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\list.xml");
-                XElement xl = doc.Root;
-                IEnumerable<XElement> ieComm = xl.Elements("List").Elements("Commercial");
-                IEnumerable<XElement> ieTech = xl.Elements("List").Elements("Technicien");
 
-                dictionnaryCommercial = ieComm
+                dictionnaryCommercial = doc.Root.Elements("Commercial")
                     .Select(x =>
                                             new Commercial(
                                                     (String)x.Element("Name"),
                                                     (Int32)x.Attribute("Type"),
-                                                    (Int32)x.Attribute("Matricule"),
+                                                    (Int32)x.Element("Matricule"),
                                                     (Int32)x.Element("Categorie"),
                                                     (Int32)x.Element("Service"),
-                                                    (String)x.Element("Email")
+                                                    (String)x.Element("Email"),
+                                                    (Double)x.Element("Salaire"),
+                                                    (Double)x.Element("CA"),
+                                                    (Int32)x.Element("Commission")
+
                                                 )
                             ).ToDictionary(c => c.Matricule);
 
-                listTechnicien = ieTech
+                listTechnicien = doc.Root.Elements("Technicien")
                     .Select(x =>
                                             new Technicien(
                                                     (String)x.Element("Name"),
                                                     (Int32)x.Attribute("Type"),
-                                                    (Int32)x.Attribute("Matricule"),
+                                                    (Int32)x.Element("Matricule"),
                                                     (Int32)x.Element("Categorie"),
                                                     (Int32)x.Element("Service"),
-                                                    (String)x.Element("Email")
+                                                    (String)x.Element("Email"),
+                                                    (Double)x.Element("Salaire")
                                                 )
-                            ).ToList();
-
-
-
+                            ).ToDictionary(t => t.Matricule);
             }
             catch (Exception e)
             {
@@ -66,68 +65,66 @@ namespace TPCSharp
                 Console.WriteLine("4 : Nombre de Salarié");
                 Console.WriteLine("5 : Supprimer un salarié par matricule");
                 Console.WriteLine("6 : Quitter");
+                Console.WriteLine("7:  Modifier un salarié");
                 Console.WriteLine("8 : Clear all lists !!!");
+                Console.WriteLine("9 : Enregistrer les salariés");
                 Console.WriteLine("");
 
                 try
                 {
-                    Console.WriteLine("");
                     Console.Write("Entrez votre Choix : ");
-                    Int32 choice = Convert.ToInt32(Console.ReadLine());
+                    Int32 choice =CheckInt(Console.ReadLine(), "Choix incorrect !");
                     Console.WriteLine("");
                     switch (choice)
                     {
                         case 1:
-                            Console.WriteLine("Avez vous un matricule (o/n) : ");
-                            Console.WriteLine("Entrez votre choix :");
+                            Console.WriteLine("1. Ajouter un commercial");
+                            Console.WriteLine("2. Ajouter un Technicien");
+                            Int32 choiceSal = -1;
+                            do
+                            {
+                                Console.Write("Entrez votre Choix : ");
+                                choiceSal = CheckInt(Console.ReadLine(), "Choix Incorrect");
+                            }
+                            while (choiceSal != 1 && choiceSal != 2 );
 
-                            String choiceMatricule = Console.ReadLine();
-                            choiceMatricule.ToLower();
-
-                            if(choiceMatricule == "o")
+                            Int32 matr = -1;
+                            do
                             {
                                 Console.Write("Entrez votre matricule : ");
+                                matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
 
-                   
-                                int matr = CheckInt(Console.ReadLine());
-
-                                Console.WriteLine("1. Ajouter un commercial");
-                                Console.WriteLine("2. Ajouter un Technicien");
-                                Console.Write("Entrez votre Choix : ");
-
-                                Int32 choiceSal = Convert.ToInt32(Console.ReadLine());
-                                switch (choiceSal)
+                                foreach (KeyValuePair<Int32, Commercial> c in dictionnaryCommercial)
                                 {
-                                    case 1:
-                                        AddEmployee((Int32)Salarie.Salaries.Commercial, matr);
-                                        break;
-                                    case 2:
-                                        AddEmployee((Int32)Salarie.Salaries.Technicien, matr);
-                                        break;
-                                    default:
-                                        break;
+                                    if (c.Key == matr)
+                                    {
+                                        Console.WriteLine("Le matricule {0} existe déjà ! ", matr);
+                                        matr = -1;
+                                    }
+                                }
+
+                                foreach (KeyValuePair<Int32, Technicien> t in listTechnicien)
+                                {
+                                    if (t.Key == matr)
+                                    {
+                                        Console.WriteLine("Le matricule {0} existe déjà !", matr);
+                                        matr = -1;
+                                    }
                                 }
                             }
-                            else
+                            while (matr == -1);
+
+                            switch (choiceSal)
                             {
-                                Console.WriteLine("1. Ajouter un commercial");
-                                Console.WriteLine("2. Ajouter un Technicien");
-                                Console.Write("Entrez votre Choix : ");
-
-                                Int32 choiceSal = Convert.ToInt32(Console.ReadLine());
-                                switch (choiceSal)
-                                {
-                                    case 1:
-                                        AddEmployee((Int32)Salarie.Salaries.Commercial);
-                                        break;
-                                    case 2:
-                                        AddEmployee((Int32)Salarie.Salaries.Technicien);
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                case 1:
+                                    AddEmployee((Int32)Salarie.Salaries.Commercial, matr);
+                                    break;
+                                case 2:
+                                    AddEmployee((Int32)Salarie.Salaries.Technicien, matr);
+                                    break;
+                                default:
+                                    break;
                             }
-                            
                             break;
                         case 2:
                             DisplayListSalarie();
@@ -140,7 +137,7 @@ namespace TPCSharp
                                 try
                                 {
                                     Console.Write("Entrez un matricule : ");
-                                    findSalarieByMatricule(Convert.ToInt32(Console.ReadLine()));
+                                    findSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));
                                     bb = false;
                                 }
                                 catch (FormatException)
@@ -156,6 +153,7 @@ namespace TPCSharp
                             break;
                         case 4:
                             Console.WriteLine("Nombre de salariés enregistrés :" + GetNombreSalarie());
+                            Console.WriteLine("Nombre Personnes : " + Personne.Count);
                             break;
                         case 5:
                             Boolean bbb = true;
@@ -165,7 +163,7 @@ namespace TPCSharp
                                 try
                                 {
                                     Console.Write("Entrez un matricule : ");
-                                    DeleteSalarieByMatricule(Convert.ToInt32(Console.ReadLine()));
+                                    DeleteSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));
                                     bbb = false;
                                 }
                                 catch (FormatException)
@@ -185,11 +183,14 @@ namespace TPCSharp
                             break;
 
                         case 7:
-
+                            ModifierSalarie();
                             break;
 
                         case 8:
                             ClearAllList();
+                            break;
+                        case 9:
+                            SaveToFile();
                             break;
                         default:
                             break;
@@ -206,6 +207,25 @@ namespace TPCSharp
                     PrintErrorMessage();
                 }
             }
+        }
+
+        private static void ModifierSalarie()
+        {
+            Console.Write("Entrez un matricule : ");
+            Int32 matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
+
+            if(GetSalarieByMatricule<Salarie>(matr).Type == (Int32)Salarie.Salaries.Commercial)
+            {
+                Commercial c = GetSalarieByMatricule<Commercial>(matr);
+                DisplaySalarie(c);
+            }
+            if (GetSalarieByMatricule<Salarie>(matr).Type == (Int32)Salarie.Salaries.Technicien)
+            {
+                Technicien t = GetSalarieByMatricule<Technicien>(matr);
+                DisplaySalarie(t);
+            }
+
+
         }
 
         /// <summary>
@@ -227,37 +247,42 @@ namespace TPCSharp
             {
                 //Save Commercial
                 XElement xEle = new XElement("List");
-                
+
                 xEle.Add(
                     from comm in dictionnaryCommercial
                     select new XElement("Commercial",
                                 new XAttribute("Type", comm.Value.Type),
-                                new XAttribute("Matricule", comm.Key),
+                                  new XElement("Matricule", comm.Key),
                                   new XElement("Name", comm.Value.Name),
                                   new XElement("Categorie", comm.Value.Categorie),
                                   new XElement("Service", comm.Value.Service),
-                                  new XElement("Email", comm.Value.Email)
+                                  new XElement("Salaire", comm.Value.Salaire),
+                                  new XElement("Email", comm.Value.Email),
+                                  new XElement("CA", comm.Value.ChiffreAffaire),
+                                  new XElement("Commission", comm.Value.Commission)
                                   )
                                   );
-              
+
                 //Save Technicien
                 xEle.Add(
                     from tech in listTechnicien
                     select new XElement("Technicien",
-                                new XAttribute("Type", tech.Type),
-                                new XAttribute("Matricule", tech.Matricule),
-                                  new XElement("Name", tech.Name),
-                                  new XElement("Categorie", tech.Categorie),
-                                  new XElement("Service", tech.Service),
-                                  new XElement("Email", tech.Email)
+                                new XAttribute("Type", tech.Value.Type),
+                                  new XElement("Matricule", tech.Value.Matricule),
+                                  new XElement("Name", tech.Value.Name),
+                                  new XElement("Categorie", tech.Value.Categorie),
+                                  new XElement("Service", tech.Value.Service),
+                                  new XElement("Salaire", tech.Value.Salaire),
+                                  new XElement("Email", tech.Value.Email)
                                   )
                                   );
 
                 xEle.Save("C:\\Users\\Public\\Documents\\list.xml");
+                Console.WriteLine("Les salariés sont sauvegardés dans list.xml ! \n");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Error saving into file list.xml : " + ex.Message);
             }
         }
 
@@ -268,100 +293,6 @@ namespace TPCSharp
         private static Int32 GetNombreSalarie()
         {
             return dictionnaryCommercial.Count + listTechnicien.Count;
-        }
-
-        public static void AddEmployee(Int32 typeSalarie)
-        {
-            Console.Write("Nom : ");
-            
-            String name = Console.ReadLine();
-
-            Console.WriteLine("Catégorie : ");
-            Console.WriteLine("1. RH");
-            Console.WriteLine("2. Compta");
-            Console.WriteLine("3. Admin");
-            Console.WriteLine("4. Info");
-
-            int cat = -1;
-            switch (CheckInt(Console.ReadLine()))
-            {
-                case 1:
-                    cat = (Int32)Salarie.Categories.RH;
-                    break;
-                case 2:
-                    cat = (Int32)Salarie.Categories.Compta;
-                    break;
-                case 3:
-                    cat = (Int32)Salarie.Categories.Admin;
-                    break;
-                case 4:
-                    cat = (Int32)Salarie.Categories.Info;
-                    break;
-                default:
-
-                    break;
-            }
-
-            int serv = -1;
-            Console.Write("Service : ");
-            serv = CheckInt(Console.ReadLine());
-
-            Double sal = 0;
-            Console.Write("Salaire(€): ");
-            sal = CheckDouble(Console.ReadLine());
-
-            Boolean flag = true;
-            String em = null;
-            while (flag)
-            {
-                Console.Write("Email @ : ");
-                String email = Console.ReadLine();
-
-                if (Program.checkEmail(email))
-                {
-                    em = email;
-                    flag = false;
-                }
-            }
-
-
-            if (typeSalarie == (Int32)Salarie.Salaries.Commercial)
-            {
-                Double ca = 0;
-                Console.Write("ChiffreAffaire: ");
-                ca = CheckDouble(Console.ReadLine());
-
-                int com = -1;
-                Console.Write("Commission (%): ");
-                com = CheckInt(Console.ReadLine());
-
-                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial);
-                commercial.Categorie = cat;
-                commercial.Service = serv;
-                commercial.Email = em;
-                commercial.Salaire = sal;
-                commercial.ChiffreAffaire = ca;
-                commercial.Commission = com;
-                dictionnaryCommercial.Add(commercial.Matricule, commercial);
-
-            }
-            else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
-            {
-                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien);
-                technicien.Categorie = cat;
-                technicien.Service = serv;
-                technicien.Email = em;
-                technicien.Salaire = sal;
-
-
-                listTechnicien.Add(technicien);
-            }
-
-            Console.ReadLine();
-            Console.WriteLine("");
-            Console.WriteLine("Ajouté ! ");
-            Console.WriteLine("");
-
         }
 
         public static void AddEmployee(Int32 typeSalarie, Int32 matr)
@@ -376,33 +307,38 @@ namespace TPCSharp
             Console.WriteLine("3. Admin");
             Console.WriteLine("4. Info");
 
-            int cat = -1;
-            switch (CheckInt(Console.ReadLine()))
-            {
-                case 1:
-                    cat = (Int32)Salarie.Categories.RH;
-                    break;
-                case 2:
-                    cat = (Int32)Salarie.Categories.Compta;
-                    break;
-                case 3:
-                    cat = (Int32)Salarie.Categories.Admin;
-                    break;
-                case 4:
-                    cat = (Int32)Salarie.Categories.Info;
-                    break;
-                default:
-
-                    break;
+            Int32 cat = -1;
+            do {
+                Console.Write("Choix catégorie : ");
+                switch (CheckInt(Console.ReadLine(), "Mauvais choix de catégorie"))
+                {
+                    case 1:
+                        cat = (Int32)Salarie.Categories.RH;
+                        break;
+                    case 2:
+                        cat = (Int32)Salarie.Categories.Compta;
+                        break;
+                    case 3:
+                        cat = (Int32)Salarie.Categories.Admin;
+                        break;
+                    case 4:
+                        cat = (Int32)Salarie.Categories.Info;
+                        break;
+                    default:
+                        Console.WriteLine("Cette catégorie n'existe pas !!!");
+                        cat = -1;
+                        break;
+                }
             }
+            while (cat == -1);
 
             int serv = -1;
             Console.Write("Service : ");
-            serv = CheckInt(Console.ReadLine());
+            serv = CheckInt(Console.ReadLine(), "Mauvais choix de service");
 
             Double sal = 0;
             Console.Write("Salaire(€): ");
-            sal = CheckDouble(Console.ReadLine());
+            sal = CheckDouble(Console.ReadLine(), "Salaire faux, seulement des chiffres");
 
             Boolean flag = true;
             String em = null;
@@ -421,49 +357,43 @@ namespace TPCSharp
 
             if (typeSalarie == (Int32)Salarie.Salaries.Commercial)
             {
-                Double ca = 0;
                 Console.Write("ChiffreAffaire: ");
-                ca = CheckDouble(Console.ReadLine());
+                Double ca = CheckDouble(Console.ReadLine(), "CA doit contenir seulement des chiffres !");
 
-                int com = -1;
                 Console.Write("Commission (%): ");
-                com = CheckInt(Console.ReadLine());
+                Int32 com = -1;
+                do {
+                    com = CheckInt(Console.ReadLine(), "Erreur commission !");
+                }
+                while (com <= 0 && com >= 100);
 
-                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr);
-                commercial.Categorie = cat;
-                commercial.Service = serv;
-                commercial.Email = em;
-                commercial.Salaire = sal;
-                commercial.ChiffreAffaire = ca;
-                commercial.Commission = com;
+                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, em, sal, ca, com);
 
-                dictionnaryCommercial.Add(commercial.Matricule, commercial);
+                try
+                {
+                    dictionnaryCommercial.Add(commercial.Matricule, commercial);
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("ArgumentNullException ");
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Argument Exception");
+                }
+                
 
             }
             else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
             {
-                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr);
-                technicien.Categorie = cat;
-                technicien.Service = serv;
-                technicien.Email = em;
-                technicien.Salaire = sal;
+                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, em, sal);
 
-
-                listTechnicien.Add(technicien);
+                listTechnicien.Add(technicien.Matricule, technicien);
             }
 
-            Console.ReadLine();
             Console.WriteLine("");
             Console.WriteLine("Ajouté ! ");
             Console.WriteLine("");
-        }
-
-        public static bool IsMatriculeExist(Int32 matr)
-        {
-
-            Boolean flag = false;
-           
-            return flag;
         }
 
 
@@ -480,7 +410,6 @@ namespace TPCSharp
             }
             else
             {
-                
                 foreach (KeyValuePair<Int32, Commercial> kpv in dictionnaryCommercial)
                 {
                     DisplaySalarie(kpv);
@@ -493,7 +422,7 @@ namespace TPCSharp
             }
             else
             {
-                foreach(Technicien tech in listTechnicien)
+                foreach(KeyValuePair<Int32, Technicien>  tech in listTechnicien)
                 {
                     DisplaySalarie(tech);
                 }
@@ -511,16 +440,13 @@ namespace TPCSharp
 
         }
 
-
-
-
         /// <summary>
         /// Boucle pour vérifier si le paramètre (String) est convertible en Int32
         /// 
         /// </summary>
         /// <param name="serv"</param>
         /// <returns></returns>
-        private static Int32 CheckInt(String serv) 
+        private static Int32 CheckInt(String serv, String message) 
         {
             bool flag = true;
             int c = -1;
@@ -534,12 +460,12 @@ namespace TPCSharp
                 }
                 catch (FormatException)
                 {
-                    PrintErrorMessage();
+                    PrintErrorMessage(message);
                     serv = Console.ReadLine();
                 }
                 catch (OverflowException)
                 {
-                    PrintErrorMessage();
+                    PrintErrorMessage(message);
                     serv = Console.ReadLine();
                 }
             }
@@ -553,7 +479,7 @@ namespace TPCSharp
         /// </summary>
         /// <param name="serv"</param>
         /// <returns></returns>
-        private static Double CheckDouble(String sal)
+        private static Double CheckDouble(String sal, String message)
         {
             bool flag = true;
             double c = -1;
@@ -595,11 +521,11 @@ namespace TPCSharp
                     s = kvp.Value;
                 }
             }
-            foreach(Technicien tech in listTechnicien)
+            foreach(KeyValuePair<Int32, Technicien>  tech in listTechnicien)
             {
-                if(tech.Matricule == mat)
+                if(tech.Key == mat)
                 {
-                    s = tech;
+                    s = tech.Value;
                 }
             }
 
@@ -614,13 +540,40 @@ namespace TPCSharp
             }
         }
 
+        private static T GetSalarieByMatricule<T>(Int32 mat) where T:Salarie
+        {
+            foreach (KeyValuePair<Int32, Commercial> kvp in dictionnaryCommercial)
+            {
+                if (kvp.Key == mat)
+                {
+                    
+                    return (T)Convert.ChangeType(kvp.Value, typeof(T));
+                }
+            }
+            foreach (KeyValuePair<Int32, Technicien> tech in listTechnicien)
+            {
+                if (tech.Key == mat)
+                {
+                    return (T)Convert.ChangeType(tech.Value, typeof(T));
+                }
+            }
+            return null;
+        }
+
+
         /// <summary>
         /// Affiche une erreur générique
         /// </summary>
         private static void PrintErrorMessage()
         {
             Console.WriteLine("Erreur dans la saisie : ");
-            Console.WriteLine("Entrer une nouvelle valeur :\n ");
+            Console.Write("Entrer une nouvelle valeur : ");
+        }
+
+        private static void PrintErrorMessage(String message)
+        {
+            Console.WriteLine("Erreur dans la saisie : " + message);
+            Console.Write("Entrer une nouvelle valeur : ");
         }
 
         /// <summary>
@@ -643,11 +596,11 @@ namespace TPCSharp
             }
             for (int i=0; i<=listTechnicien.Count-1; i++)
             {
-                Technicien tech = listTechnicien.ElementAt(i);
-                if (tech.Matricule == mat)
+                KeyValuePair<Int32, Technicien> kvp = listTechnicien.ElementAt(i);
+                if (kvp.Key == mat)
                 {
-                    listTechnicien.Remove(tech);
-                    Console.WriteLine("Salarié : " + tech.Name + " a été supprimé de la liste salarié !");
+                    listTechnicien.Remove(kvp.Key);
+                    Console.WriteLine("Salarié : " + kvp.Value.Name + " a été supprimé de la liste salarié !");
                 }
             }
             if (!isDeleted)
