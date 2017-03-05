@@ -214,17 +214,51 @@ namespace TPCSharp
             Console.Write("Entrez un matricule : ");
             Int32 matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
 
-            if(GetSalarieByMatricule<Salarie>(matr).Type == (Int32)Salarie.Salaries.Commercial)
+            Salarie s = GetSalarieByMatricule<Salarie>(matr);
+            if ( s != null)
             {
-                Commercial c = GetSalarieByMatricule<Commercial>(matr);
-                DisplaySalarie(c);
-            }
-            if (GetSalarieByMatricule<Salarie>(matr).Type == (Int32)Salarie.Salaries.Technicien)
-            {
-                Technicien t = GetSalarieByMatricule<Technicien>(matr);
-                DisplaySalarie(t);
-            }
 
+                if (s.Type == (Int32)Salarie.Salaries.Commercial)
+                {
+                    Commercial c = GetSalarieByMatricule<Commercial>(matr);
+                    DisplaySalarie(c);
+                    Console.WriteLine("1 : Changer Nom");
+                    Console.WriteLine("2 : Changer Matricule");
+                    Console.WriteLine("3 : Changer Email");
+                    Console.WriteLine("4 : Changer Salaire");
+
+                    Int32 choice = -1;
+                    do
+                    {
+                        Console.Write("Choix : ");
+                        choice = CheckInt(Console.ReadLine(), "Erreur choix !");
+                        switch (choice)
+                        {
+                            case 1:
+                                Console.Write("Nouveau Nom : ");
+                                c.Name = Console.ReadLine();
+                                break;
+                            case 2:
+                                Console.Write("Matricule :");
+
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                break;
+                            default:
+                                choice = -1;
+                                break;
+                        }
+                    }
+                    while (choice <= 1 && choice >= 4);
+                }
+                if (s.Type == (Int32)Salarie.Salaries.Technicien)
+                {
+                    Technicien t = GetSalarieByMatricule<Technicien>(matr);
+                    DisplaySalarie(t);
+                }
+            }
 
         }
 
@@ -294,6 +328,8 @@ namespace TPCSharp
         {
             return dictionnaryCommercial.Count + listTechnicien.Count;
         }
+
+
 
         public static void AddEmployee(Int32 typeSalarie, Int32 matr)
         {
@@ -547,14 +583,14 @@ namespace TPCSharp
                 if (kvp.Key == mat)
                 {
                     
-                    return (T)Convert.ChangeType(kvp.Value, typeof(T));
+                    return (T)Convert.ChangeType(kvp.Value, typeof(Commercial));
                 }
             }
             foreach (KeyValuePair<Int32, Technicien> tech in listTechnicien)
             {
                 if (tech.Key == mat)
                 {
-                    return (T)Convert.ChangeType(tech.Value, typeof(T));
+                    return (T)Convert.ChangeType(tech.Value, typeof(Technicien));
                 }
             }
             return null;
