@@ -42,72 +42,27 @@ namespace TPCSharp
                     switch (choice)
                     {
                         case 1:
-                            Console.WriteLine("1. Ajouter un commercial");
-                            Console.WriteLine("2. Ajouter un Technicien");
-                            Int32 choiceSal = -1;
-                            do
-                            {
-                                Console.Write("Entrez votre Choix : ");
-                                choiceSal = CheckInt(Console.ReadLine(), "Choix Incorrect");
-                            }
-                            while (choiceSal != 1 && choiceSal != 2 );
-
-                            Int32 matr = IsMatriculeValid();
-
-                            switch (choiceSal)
-                            {
-                                case 1:
-                                    AddEmployee((Int32)Salarie.Salaries.Commercial, matr);
-                                    break;
-                                case 2:
-                                    AddEmployee((Int32)Salarie.Salaries.Technicien, matr);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            AddSalarie();
                             break;
                         case 2:
                             DisplayListSalarie();
                             break;
                         case 3:
-                            Console.Write("Matricule : ");
-                            findSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));                            
+                            findSalarieByMatricule();                            
                             break;
                         case 4:
-                            Console.WriteLine("Nombre de salariés enregistrés :" + GetNombreSalarie());
-                            Console.WriteLine("Nombre Personnes : " + Personne.Count);
+                            GetNombreSalarie();
                             break;
                         case 5:
-                            Boolean bbb = true;
-                            
-                            while (bbb)
-                            {
-                                try
-                                {
-                                    Console.Write("Entrez un matricule : ");
-                                    DeleteSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));
-                                    bbb = false;
-                                }
-                                catch (FormatException)
-                                {
-                                    PrintErrorMessage();
-                                }
-                                catch (OverflowException)
-                                {
-                                    PrintErrorMessage();
-                                }
-                            }
-                            
+                            DeleteSalarieByMatricule();
                             break;
                         case 6:
                             SaveToFile();
                             b = false;
                             break;
-
                         case 7:
                             ModifierSalarie();
                             break;
-
                         case 8:
                             ClearAllList();
                             break;
@@ -177,40 +132,51 @@ namespace TPCSharp
             }
         }
 
+        private static Int32 IsMatriculeValid()
+        {
+            Int32 mat = -1;
+            do
+            {
+                Console.Write("Entrez le matricule : ");
+                mat = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
+            } while (mat == -1);
+            return mat;
+        }
+
         /// <summary>
         /// Check whether the matricule already exists
         /// <para>Return the matricule entered or -1 if not !</para>
         /// </summary>
         /// <param name="matricule"></param>
         /// <returns></returns>
-        private static Int32 IsMatriculeValid()
+        private static Int32 DoesMatriculeExist()
         {
-            Int32 matr = -1;
+            Int32 mat = -1;
             do
             {
                 Console.Write("Entrez le matricule : ");
-                matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
+                mat = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
 
                 foreach (KeyValuePair<Int32, Commercial> c in dictionnaryCommercial)
                 {
-                    if (c.Key == matr)
+                    if (c.Key == mat)
                     {
-                        Console.WriteLine("Le matricule {0} existe déjà ! ", matr);
-                        matr = -1;
+                        Console.WriteLine("Le matricule {0} existe déjà ! ", mat);
+                        mat = -1;
                     }
                 }
 
                 foreach (KeyValuePair<Int32, Technicien> t in listTechnicien)
                 {
-                    if (t.Key == matr)
+                    if (t.Key == mat)
                     {
-                        Console.WriteLine("Le matricule {0} existe déjà !", matr);
-                        matr = -1;
+                        Console.WriteLine("Le matricule {0} existe déjà !", mat);
+                        mat = -1;
                     }
                 }
             }
-            while (matr == -1);
-            return matr;
+            while (mat == -1);
+            return mat;
         }
 
 
@@ -250,7 +216,7 @@ namespace TPCSharp
                                 break;
                             case 2:
                                 Console.Write("Matricule : ");
-                                c.Matricule = IsMatriculeValid();
+                                c.Matricule = DoesMatriculeExist();
                                 break;
                             case 3:
                                 Console.Write("Email : ");
@@ -297,7 +263,7 @@ namespace TPCSharp
                                 break;
                             case 2:
                                 Console.Write("Matricule :");
-                                t.Matricule = IsMatriculeValid();
+                                t.Matricule = DoesMatriculeExist();
                                 break;
                             case 3:
                                 Console.Write("Email : ");
@@ -411,7 +377,37 @@ namespace TPCSharp
         /// <returns>Int32</returns>
         private static Int32 GetNombreSalarie()
         {
-            return dictionnaryCommercial.Count + listTechnicien.Count;
+            Int32 total = dictionnaryCommercial.Count + listTechnicien.Count;
+            Console.WriteLine("Nombre de salariés enregistrés :" + total );
+            Console.WriteLine("Nombre Personnes : " + Personne.Count);
+            return total;
+        }
+
+        private static void AddSalarie()
+        {
+            Console.WriteLine("1. Ajouter un commercial");
+            Console.WriteLine("2. Ajouter un Technicien");
+            Int32 choiceSal = -1;
+            do
+            {
+                Console.Write("Entrez votre Choix : ");
+                choiceSal = CheckInt(Console.ReadLine(), "Choix Incorrect");
+            }
+            while (choiceSal != 1 && choiceSal != 2);
+
+            Int32 matr = DoesMatriculeExist();
+
+            switch (choiceSal)
+            {
+                case 1:
+                    AddEmployee((Int32)Salarie.Salaries.Commercial, matr);
+                    break;
+                case 2:
+                    AddEmployee((Int32)Salarie.Salaries.Technicien, matr);
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
@@ -686,8 +682,11 @@ namespace TPCSharp
         /// Recherche un salarié dans la liste par matricule
         /// </summary>
         /// <param name="mat">Matricule Salarié</param>
-        private static void findSalarieByMatricule(Int32 mat)
+        private static void findSalarieByMatricule()
         {
+            Console.Write("Matricule : ");
+            Int32 mat = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
+
             Salarie s = null;
             
             foreach(KeyValuePair<Int32, Commercial> kvp in dictionnaryCommercial)
@@ -758,8 +757,9 @@ namespace TPCSharp
         /// 
         /// </summary>
         /// <param name="mat">Matricule</param>
-        private static void DeleteSalarieByMatricule(Int32 mat)
+        private static void DeleteSalarieByMatricule()
         {
+            Int32 mat = IsMatriculeValid();
             Boolean isDeleted = false;
             for (int i=0; i <= dictionnaryCommercial.Count-1; i++)
             {
