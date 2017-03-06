@@ -28,8 +28,8 @@ namespace GUI
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            AddSalarieDialog addSalarieDialog = new AddSalarieDialog();
-            addSalarieDialog.Show();
+            //AddSalarieDialog addSalarieDialog = new AddSalarieDialog();
+            //addSalarieDialog.Show();
         }
 
     }  

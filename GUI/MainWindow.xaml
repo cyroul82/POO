@@ -3,29 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="TPAfpa" Height="350" Width="525">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
-            <Button x:Name="AddSalarieButton" Content="Ajouter" Height="30" Width="70" Click="addButton_Click" Background="#CBDFFF" BorderThickness="0" ></Button>
+        <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <Button x:Name="AddSalarieButton" Content="Ajouter" Height="30" Width="110" Click="addButton_Click"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="110"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="110"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="DeleteSalarieButton" Content="Supprimer" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="DeleteSalarieButton" Content="Supprimer" Height="30" Width="110"  ></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="ModifySalarieButton" Content="Modifier" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="ModifySalarieButton" Content="Modifier" Height="30" Width="110"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="SaveButton" Content="Enregistrer" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="SaveButton" Content="Enregistrer" Height="30" Width="110" ></Button>
         </StackPanel>
 
-        <StackPanel  Grid.Column="1" VerticalAlignment="Center" Margin="20 0 20 0">
+        <StackPanel  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="20 0 20 0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -33,7 +43,7 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="50"/>
 
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -50,16 +60,20 @@
                 <TextBox Grid.Row="1" Grid.Column="1" Width="200" Margin="3"/>
                 <TextBox Grid.Row="2" Grid.Column="1" Width="200" Margin="3"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Width="200" Margin="3"/>
-                <TextBox Grid.Row="4" Grid.Column="1" Width="200" Margin="3"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Width="200" Margin="3"/>
 
-                <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="Ok" Content="OK" Width="70"></Button>
+                <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="0 10 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="Ok" Content="OK" Width="90"></Button>
                     <Separator Width="20" Background="Transparent"></Separator>
-                    <Button x:Name="Annuler" Content="Annuler" Width="70"></Button>
+                    <Button x:Name="Annuler" Content="Annuler" Width="90"></Button>
                 </StackPanel>
                 
 
             </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 5 5 5">
+            <Label x:Name="InfoLabel" Content="info"></Label>
         </StackPanel>
 
     </Grid>
