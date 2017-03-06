@@ -5,15 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Background="#113C7F"
         Title="MainWindow" Height="350" Width="525">
-    <Grid Margin="0 20 0 0">
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
             <Button x:Name="AddSalarieButton" Content="Ajouter" Height="30" Width="70" Click="addButton_Click" Background="#CBDFFF" BorderThickness="0" ></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="RechercherButton" Content="Rechercher" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Separator Width="20" Background="Transparent"></Separator>
+            <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Separator Width="20" Background="Transparent"></Separator>
+            <Button x:Name="DeleteSalarieButton" Content="Supprimer" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Separator Width="20" Background="Transparent"></Separator>
+            <Button x:Name="ModifySalarieButton" Content="Modifier" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
+            <Separator Width="20" Background="Transparent"></Separator>
+            <Button x:Name="SaveButton" Content="Enregistrer" Height="30" Width="70" Background="#CBDFFF" BorderThickness="0"></Button>
         </StackPanel>
 
+        <StackPanel  Grid.Column="1" VerticalAlignment="Center" Margin="20 0 20 0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Nom :" HorizontalAlignment="Right"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Matricule :" HorizontalAlignment="Right"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Salaire" HorizontalAlignment="Right"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Email :" HorizontalAlignment="Right"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Categorie :" HorizontalAlignment="Right"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1" Width="200" Margin="3"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="200" Margin="3"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="200" Margin="3"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Width="200" Margin="3"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Width="200" Margin="3"/>
+
+                <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="Ok" Content="OK" Width="70"></Button>
+                    <Separator Width="20" Background="Transparent"></Separator>
+                    <Button x:Name="Annuler" Content="Annuler" Width="70"></Button>
+                </StackPanel>
+                
+
+            </Grid>
+        </StackPanel>
 
     </Grid>
 </Window>
