@@ -16,6 +16,11 @@ namespace TPCSharp
             ChiffreAffaire = ca;
             Commission = com;
         }
+        public Commercial(String name, Int32 type, Int32 mat, Int32 cat, Int32 serv, String email, Double ca, Int32 com) : base(name, type, mat, cat, serv, email)
+        {
+            ChiffreAffaire = ca;
+            Commission = com;
+        }
 
         public override Double CalculerSalaire()
         {

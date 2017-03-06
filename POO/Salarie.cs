@@ -73,14 +73,26 @@ namespace TPCSharp
             Matricule = matricule;
             Email = email;
             Salaire = salaire;
-            if(salaire < 0)
-            {
-                throw new SalarieException(this);
-            }
 
             Personne.Count++;
 
         }
+
+        public Salarie(String name, Int32 type, Int32 matricule, Int32 catg, Int32 serv, String email)
+        {
+            base.Name = name;
+            this.Matricule = matricule;
+            this.Type = type;
+            Categorie = catg;
+            Service = serv;
+            Matricule = matricule;
+            Email = email;
+
+            Personne.Count++;
+
+        }
+
+
 
         public override bool Equals(object obj)
         {

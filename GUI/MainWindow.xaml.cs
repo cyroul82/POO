@@ -21,9 +21,14 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private static Dictionary<Int32, Commercial> dictionnaryCommercial = new Dictionary<Int32, Commercial>();
+        private static Dictionary<Int32, Technicien> listTechnicien = new Dictionary<Int32, Technicien>();
         public MainWindow()
         {
+            TPCSharp.Application.LoadFileList();
             InitializeComponent();
+            
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -32,6 +37,7 @@ namespace GUI
             {
                 HideAllPanel();
                 AddPanel.Visibility = Visibility.Visible;
+                AddPanel.IsEnabled = true;
             }
             //AddSalarieDialog addSalarieDialog = new AddSalarieDialog();
             //addSalarieDialog.Show();
@@ -43,13 +49,20 @@ namespace GUI
             {
                 HideAllPanel();
                 SearchMatriculePanel.Visibility = Visibility.Visible;
+                SearchMatriculePanel.IsEnabled = true;
             }
         }
 
         private void HideAllPanel()
         {
             AddPanel.Visibility = Visibility.Collapsed;
+            AddPanel.IsEnabled = false;
+
             SearchMatriculePanel.Visibility = Visibility.Collapsed;
+            SearchMatriculePanel.IsEnabled = false;
+
+            ListPanel.Visibility = Visibility.Collapsed;
+            ListPanel.IsEnabled = false;
         }
 
         private void SearchMatriculeButton_Click(object sender, RoutedEventArgs e)
@@ -79,8 +92,16 @@ namespace GUI
                 MessageBox.Show("Le matricule est trop long !", "OverFlow Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 MatriculeTextBox.Text = "";
             }
-            
-            
+        }
+
+        private void ListButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListPanel.Visibility != Visibility.Visible)
+            {
+                HideAllPanel();
+                ListPanel.Visibility = Visibility.Visible;
+                ListPanel.IsEnabled = true;
+            }
         }
     }  
 }

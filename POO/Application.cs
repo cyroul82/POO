@@ -86,17 +86,10 @@ namespace TPCSharp
             }
         }
 
-        public static void Start()
-        {
-            dictionnaryCommercial = new Dictionary<Int32, Commercial>();
-            listTechnicien = new Dictionary<Int32, Technicien>();
-            LoadFileList();
-        }
-
         /// <summary>
         /// Load from the fil list.xml into the technicien List and the Commercial List
         /// </summary>
-        private static void LoadFileList()
+        public static void LoadFileList()
         {
             try
             {
@@ -463,9 +456,7 @@ namespace TPCSharp
             Console.Write("Service : ");
             serv = CheckInt(Console.ReadLine(), "Mauvais choix de service");
 
-            Double sal = 0;
-            Console.Write("Salaire(€): ");
-            sal = CheckDouble(Console.ReadLine(), "Salaire faux, seulement des chiffres");
+            
 
             String email = GetEmail();
 
@@ -475,27 +466,39 @@ namespace TPCSharp
                 Double ca = CheckDouble(Console.ReadLine(), "CA doit contenir seulement des chiffres !");
 
                 Int32 com = GetCommission();
-                
-                try
+
+                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, ca, com);
+                dictionnaryCommercial.Add(commercial.Matricule, commercial);
+                bool b = false;
+                do
                 {
-                    Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, sal, ca, com);
-                    dictionnaryCommercial.Add(commercial.Matricule, commercial);
-                    Console.WriteLine("");
-                    Console.WriteLine("Ajouté ! ");
-                    Console.WriteLine("");
+                    
+                    try
+                    {
+
+
+                        Console.Write("Salaire(€): ");
+                        commercial.Salaire = CheckDouble(Console.ReadLine(), "Salaire faux, seulement des chiffres");
+
+                        Console.WriteLine("");
+                        Console.WriteLine("Ajouté ! ");
+                        Console.WriteLine("");
+                        b = true;
+                    }
+                    catch (SalaireSalarieException se)
+                    {
+                        Console.WriteLine(se.ToString());
+                    }
+                    catch (ArgumentNullException)
+                    {
+                        Console.WriteLine("ArgumentNullException ");
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine("Argument Exception");
+                    }
                 }
-                catch(SalaireSalarieException se)
-                {
-                    Console.WriteLine(se.ToString());
-                }
-                catch (ArgumentNullException)
-                {
-                    Console.WriteLine("ArgumentNullException ");
-                }
-                catch (ArgumentException)
-                {
-                    Console.WriteLine("Argument Exception");
-                }
+                while (!b);
                 
 
             }
@@ -503,8 +506,10 @@ namespace TPCSharp
             {
                 try
                 {
-                    Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, email, sal);
+                    Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, email);
                     listTechnicien.Add(technicien.Matricule, technicien);
+                    Console.Write("Salaire(€): ");
+                    technicien.Salaire = CheckDouble(Console.ReadLine(), "Salaire faux, seulement des chiffres");
                     Console.WriteLine("");
                     Console.WriteLine("Ajouté ! ");
                     Console.WriteLine("");
@@ -766,7 +771,6 @@ namespace TPCSharp
             {
                 DisplaySalarie(s);
             }
-            
         }
 
         public static T GetSalarieByMatricule<T>(Int32 mat) where T:Salarie

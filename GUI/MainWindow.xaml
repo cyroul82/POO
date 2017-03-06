@@ -14,7 +14,7 @@
         ResizeMode="NoResize"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="TPAfpa" Height="350" Width="525">
+        Title="TPAfpa" Height="350" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -29,7 +29,7 @@
             <Separator Width="20" Background="Transparent"></Separator>
             <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="110" Click="SearchButton_Click"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="110"></Button>
+            <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="110" QueryCursor="ListButton_Click" Click="ListButton_Click"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
             <Button x:Name="DeleteSalarieButton" Content="Supprimer" Height="30" Width="110"  ></Button>
             <Separator Width="20" Background="Transparent"></Separator>
@@ -38,49 +38,72 @@
             <Button x:Name="SaveButton" Content="Enregistrer" Height="30" Width="110" ></Button>
         </StackPanel>
 
-        <StackPanel x:Name="SearchMatriculePanel"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20 0 20 0" Orientation="Vertical">
+        <StackPanel Visibility="Collapsed" IsEnabled="False" x:Name="SearchMatriculePanel"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20 0 20 0" Orientation="Vertical">
             <Label Content="Matricule" HorizontalAlignment="Center"/>
             <TextBox x:Name="MatriculeTextBox" Width="80" HorizontalAlignment="Center"/>
             <Separator Height="10" Background="Transparent"></Separator>
             <Button x:Name ="SearchMatriculeButton" Content="Rechercher" Width="110" Click="SearchMatriculeButton_Click"/>
         </StackPanel>
 
-        <StackPanel x:Name="AddPanel" Visibility="Collapsed" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="20 0 20 0">
+        <StackPanel x:Name="AddPanel" Visibility="Collapsed" IsEnabled="False" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="20 0 20 0">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
 
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="Nom :" HorizontalAlignment="Right"/>
-                <Label Grid.Row="1" Grid.Column="0" Content="Matricule :" HorizontalAlignment="Right"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Salaire :" HorizontalAlignment="Right"/>
-                <Label Grid.Row="3" Grid.Column="0" Content="Email :" HorizontalAlignment="Right"/>
-                <Label Grid.Row="4" Grid.Column="0" Content="Categorie :" HorizontalAlignment="Right"/>
+                <Label Grid.Row="0" Grid.Column="0" Content="Nom :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Matricule :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Salaire :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Email :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Categorie :" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
-                <TextBox Grid.Row="0" Grid.Column="1" Width="200" Margin="3"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Width="200" Margin="3"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Width="200" Margin="3"/>
-                <TextBox Grid.Row="3" Grid.Column="1" Width="200" Margin="3"/>
-                <ComboBox Grid.Row="4" Grid.Column="1" Width="200" Margin="3"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="200" Margin="3" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="200" Margin="3" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="200" Margin="3" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Width="200" Margin="3" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ComboBoxCategorie" Grid.Row="4" Grid.Column="1" Width="200" Margin="3" VerticalAlignment="Center">
+                    <ComboBoxItem Content="Commercial"/>
+                    <ComboBoxItem Content="Technicien"/>
+                </ComboBox>
 
                 <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Bottom" Margin="0 10 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button x:Name="Ok" Content="OK" Width="90"></Button>
                     <Separator Width="20" Background="Transparent"></Separator>
                     <Button x:Name="Annuler" Content="Annuler" Width="90"></Button>
                 </StackPanel>
-                
 
             </Grid>
         </StackPanel>
+
+        <StackPanel x:Name="ListPanel" Visibility="Collapsed" IsEnabled="False" Grid.Column="1" Grid.Row="0"  Margin="20 0 20 0">
+            <ListView Margin="10" MinHeight="260" Name="ListViewSalarie">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Nom" Width="100" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Mat" Width="80" DisplayMemberBinding="{Binding Matricule}"/>
+                        <GridViewColumn Header="Email" Width="200">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Email}" HorizontalAlignment="Center" TextDecorations="Underline" Foreground="Blue" Cursor="Hand" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                
+            </ListView>
+        </StackPanel>
+
+
 
         <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 5 5 5">
             <Label x:Name="InfoLabel" Content="info"></Label>
