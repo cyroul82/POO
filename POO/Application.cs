@@ -258,7 +258,7 @@ namespace TPCSharp
                                 break;
                             case 3:
                                 Console.Write("Email : ");
-                                c.Email = Console.ReadLine();
+                                c.Email = GetEmail();
                                 break;
                             case 4:
                                 Console.Write("Salaire : ");
@@ -464,20 +464,7 @@ namespace TPCSharp
             Console.Write("Salaire(€): ");
             sal = CheckDouble(Console.ReadLine(), "Salaire faux, seulement des chiffres");
 
-            Boolean flag = true;
-            String em = null;
-            while (flag)
-            {
-                Console.Write("Email @ : ");
-                String email = Console.ReadLine();
-
-                if (Program.checkEmail(email))
-                {
-                    em = email;
-                    flag = false;
-                }
-            }
-
+            String email = GetEmail();
 
             if (typeSalarie == (Int32)Salarie.Salaries.Commercial)
             {
@@ -486,7 +473,7 @@ namespace TPCSharp
 
                 Int32 com = GetCommission();
 
-                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, em, sal, ca, com);
+                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, sal, ca, com);
 
                 try
                 {
@@ -505,7 +492,7 @@ namespace TPCSharp
             }
             else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
             {
-                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, em, sal);
+                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, email, sal);
 
                 listTechnicien.Add(technicien.Matricule, technicien);
             }
@@ -516,12 +503,68 @@ namespace TPCSharp
         }
 
 
+        private static String GetEmail()
+        {
+            Boolean flag = true;
+            String em = null;
+            while (flag)
+            {
+                Console.Write("Email @ : ");
+                String email = Console.ReadLine();
+
+                if (Program.checkEmail(email))
+                {
+                    em = email;
+                    flag = false;
+                }
+            }
+
+            return em;
+        }
+
         /// <summary>
         /// Affiche la liste total des salariés présent dans la liste
         /// </summary>
         private static void DisplayListSalarie()
         {
+            Console.WriteLine("1 : Afficher les commerciaux");
+            Console.WriteLine("2 : Afficher les techniciens");
+            Console.WriteLine("3 : Afficher tous les salariés" );
 
+            Int32 choice = -1;
+            do
+            {
+                Console.Write("Choix : ");
+                choice = CheckInt(Console.ReadLine(), "Entrer une valeur entre 1 et 3 !");
+                if (choice < 1 || choice > 3)
+                {
+                    Console.WriteLine("Entrer une valeur entre 1 et 3 !");
+                    choice = -1;
+                }
+
+            }
+            while (choice == -1);
+
+            switch (choice)
+            {
+                case 1:
+                    DisplayCommercialList();
+                    break;
+                case 2:
+                    DisplayTechnicienList();
+                    break;
+                case 3:
+                    DisplayCommercialList();
+                    DisplayTechnicienList();
+                    break;
+            }
+
+            
+            
+        }
+
+        private static void DisplayCommercialList()
+        {
             if (dictionnaryCommercial.Count == 0)
             {
                 Console.WriteLine("Pas de Commercial !! ");
@@ -531,18 +574,24 @@ namespace TPCSharp
             {
                 foreach (KeyValuePair<Int32, Commercial> kpv in dictionnaryCommercial)
                 {
+                    Console.WriteLine("LISTE DES COMMERCIAUX");
                     DisplaySalarie(kpv);
                 }
             }
-            if(listTechnicien.Count == 0)
+        }
+
+        private static void DisplayTechnicienList()
+        {
+            if (listTechnicien.Count == 0)
             {
                 Console.WriteLine("Pas de Technicien !! ");
                 Console.WriteLine("");
             }
             else
             {
-                foreach(KeyValuePair<Int32, Technicien>  tech in listTechnicien)
+                foreach (KeyValuePair<Int32, Technicien> tech in listTechnicien)
                 {
+                    Console.WriteLine("LISTE DES TECHNICIENS");
                     DisplaySalarie(tech);
                 }
             }
