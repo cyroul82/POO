@@ -15,43 +15,7 @@ namespace TPCSharp
 
         static void Main(string[] args)
         {
-            try
-            {
-                XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\list.xml");
-
-                dictionnaryCommercial = doc.Root.Elements("Commercial")
-                    .Select(x =>
-                                            new Commercial(
-                                                    (String)x.Element("Name"),
-                                                    (Int32)x.Attribute("Type"),
-                                                    (Int32)x.Element("Matricule"),
-                                                    (Int32)x.Element("Categorie"),
-                                                    (Int32)x.Element("Service"),
-                                                    (String)x.Element("Email"),
-                                                    (Double)x.Element("Salaire"),
-                                                    (Double)x.Element("CA"),
-                                                    (Int32)x.Element("Commission")
-
-                                                )
-                            ).ToDictionary(c => c.Matricule);
-
-                listTechnicien = doc.Root.Elements("Technicien")
-                    .Select(x =>
-                                            new Technicien(
-                                                    (String)x.Element("Name"),
-                                                    (Int32)x.Attribute("Type"),
-                                                    (Int32)x.Element("Matricule"),
-                                                    (Int32)x.Element("Categorie"),
-                                                    (Int32)x.Element("Service"),
-                                                    (String)x.Element("Email"),
-                                                    (Double)x.Element("Salaire")
-                                                )
-                            ).ToDictionary(t => t.Matricule);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error file : " + e.Message);
-            }
+            LoadFileList();
 
             Boolean b = true;
             while (b)
@@ -106,26 +70,8 @@ namespace TPCSharp
                             DisplayListSalarie();
                             break;
                         case 3:
-                            Boolean bb = true;
-                            
-                            while (bb)
-                            {
-                                try
-                                {
-                                    Console.Write("Entrez un matricule : ");
-                                    findSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));
-                                    bb = false;
-                                }
-                                catch (FormatException)
-                                {
-                                    PrintErrorMessage();
-                                }
-                                catch (OverflowException)
-                                {
-                                    PrintErrorMessage();
-                                }
-                            }
-                            
+                            Console.Write("Matricule : ");
+                            findSalarieByMatricule(CheckInt(Console.ReadLine(), "Mauvais numéro de matricule"));                            
                             break;
                         case 4:
                             Console.WriteLine("Nombre de salariés enregistrés :" + GetNombreSalarie());
@@ -186,6 +132,52 @@ namespace TPCSharp
         }
 
         /// <summary>
+        /// Load from the fil list.xml into the technicien List and the Commercial List
+        /// </summary>
+        private static void LoadFileList()
+        {
+            try
+            {
+                XDocument doc = XDocument.Load("C:\\Users\\Public\\Documents\\list.xml");
+
+                dictionnaryCommercial = doc.Root.Elements("Commercial")
+                    .Select(x =>
+                                            new Commercial(
+                                                    (String)x.Element("Name"),
+                                                    (Int32)x.Attribute("Type"),
+                                                    (Int32)x.Element("Matricule"),
+                                                    (Int32)x.Element("Categorie"),
+                                                    (Int32)x.Element("Service"),
+                                                    (String)x.Element("Email"),
+                                                    (Double)x.Element("Salaire"),
+                                                    (Double)x.Element("CA"),
+                                                    (Int32)x.Element("Commission")
+
+                                                )
+                            ).ToDictionary(c => c.Matricule);
+
+                listTechnicien = doc.Root.Elements("Technicien")
+                    .Select(x =>
+                                            new Technicien(
+                                                    (String)x.Element("Name"),
+                                                    (Int32)x.Attribute("Type"),
+                                                    (Int32)x.Element("Matricule"),
+                                                    (Int32)x.Element("Categorie"),
+                                                    (Int32)x.Element("Service"),
+                                                    (String)x.Element("Email"),
+                                                    (Double)x.Element("Salaire")
+                                                )
+                            ).ToDictionary(t => t.Matricule);
+
+               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error file : " + e.Message);
+            }
+        }
+
+        /// <summary>
         /// Check whether the matricule already exists
         /// <para>Return the matricule entered or -1 if not !</para>
         /// </summary>
@@ -196,7 +188,7 @@ namespace TPCSharp
             Int32 matr = -1;
             do
             {
-                Console.Write("Entrez votre matricule : ");
+                Console.Write("Entrez le matricule : ");
                 matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
 
                 foreach (KeyValuePair<Int32, Commercial> c in dictionnaryCommercial)
@@ -221,6 +213,10 @@ namespace TPCSharp
             return matr;
         }
 
+
+        /// <summary>
+        /// Change settings of an employee
+        /// </summary>
         private static void ModifierSalarie()
         {
             Console.Write("Entrez un matricule : ");
@@ -418,7 +414,11 @@ namespace TPCSharp
             return dictionnaryCommercial.Count + listTechnicien.Count;
         }
 
-
+        /// <summary>
+        /// Add an employee
+        /// </summary>
+        /// <param name="typeSalarie"></param>
+        /// <param name="matr"></param>
         public static void AddEmployee(Int32 typeSalarie, Int32 matr)
         {
             Console.Write("Nom : ");
@@ -474,7 +474,6 @@ namespace TPCSharp
                 Int32 com = GetCommission();
 
                 Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, sal, ca, com);
-
                 try
                 {
                     dictionnaryCommercial.Add(commercial.Matricule, commercial);
@@ -502,7 +501,10 @@ namespace TPCSharp
             Console.WriteLine("");
         }
 
-
+        /// <summary>
+        /// Check whether the email is correct and returns it
+        /// </summary>
+        /// <returns></returns>
         private static String GetEmail()
         {
             Boolean flag = true;
@@ -563,6 +565,9 @@ namespace TPCSharp
             
         }
 
+        /// <summary>
+        /// Display the commercial list
+        /// </summary>
         private static void DisplayCommercialList()
         {
             if (dictionnaryCommercial.Count == 0)
@@ -580,6 +585,9 @@ namespace TPCSharp
             }
         }
 
+        /// <summary>
+        /// Display the Technician List
+        /// </summary>
         private static void DisplayTechnicienList()
         {
             if (listTechnicien.Count == 0)
@@ -705,6 +713,7 @@ namespace TPCSharp
             else
             {
                 Console.WriteLine("Aucun salarié avec ce matricule");
+                Console.WriteLine();
             }
         }
 
@@ -759,6 +768,7 @@ namespace TPCSharp
                 {
                     dictionnaryCommercial.Remove(kvp.Key);
                     Console.WriteLine("Salarié : " + kvp.Value.Name + " a été supprimé de la liste salarié !");
+                    Personne.Count--;
                     isDeleted = true;
                 }
             }
@@ -769,6 +779,7 @@ namespace TPCSharp
                 {
                     listTechnicien.Remove(kvp.Key);
                     Console.WriteLine("Salarié : " + kvp.Value.Name + " a été supprimé de la liste salarié !");
+                    Personne.Count--;
                 }
             }
             if (!isDeleted)

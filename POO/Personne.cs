@@ -10,7 +10,7 @@ namespace TPCSharp
     {
         public String Name { get; set; }
 
-        public static int Count { get; protected set; } = 0;
+        public static int Count { get; set; } = 0;
 
     }
 }
