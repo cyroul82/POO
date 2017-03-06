@@ -11,10 +11,6 @@ namespace TPCSharp
         public Double ChiffreAffaire { get; set; }
         public Int32 Commission { get; set; }
 
-        //public Commercial(String name, Int32 type, Int32 mat) : base(name, type, mat)
-        //{
-        //}
-
         public Commercial(String name, Int32 type, Int32 mat, Int32 cat, Int32 serv, String email, Double salaire, Double ca, Int32 com) : base(name, type, mat, cat, serv, email, salaire)
         {
             ChiffreAffaire = ca;
