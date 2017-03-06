@@ -88,31 +88,7 @@ namespace TPCSharp
                             }
                             while (choiceSal != 1 && choiceSal != 2 );
 
-                            Int32 matr = -1;
-                            do
-                            {
-                                Console.Write("Entrez votre matricule : ");
-                                matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
-
-                                foreach (KeyValuePair<Int32, Commercial> c in dictionnaryCommercial)
-                                {
-                                    if (c.Key == matr)
-                                    {
-                                        Console.WriteLine("Le matricule {0} existe déjà ! ", matr);
-                                        matr = -1;
-                                    }
-                                }
-
-                                foreach (KeyValuePair<Int32, Technicien> t in listTechnicien)
-                                {
-                                    if (t.Key == matr)
-                                    {
-                                        Console.WriteLine("Le matricule {0} existe déjà !", matr);
-                                        matr = -1;
-                                    }
-                                }
-                            }
-                            while (matr == -1);
+                            Int32 matr = IsMatriculeValid();
 
                             switch (choiceSal)
                             {
@@ -209,6 +185,42 @@ namespace TPCSharp
             }
         }
 
+        /// <summary>
+        /// Check whether the matricule already exists
+        /// <para>Return the matricule entered or -1 if not !</para>
+        /// </summary>
+        /// <param name="matricule"></param>
+        /// <returns></returns>
+        private static Int32 IsMatriculeValid()
+        {
+            Int32 matr = -1;
+            do
+            {
+                Console.Write("Entrez votre matricule : ");
+                matr = CheckInt(Console.ReadLine(), "Mauvais numéro de matricule");
+
+                foreach (KeyValuePair<Int32, Commercial> c in dictionnaryCommercial)
+                {
+                    if (c.Key == matr)
+                    {
+                        Console.WriteLine("Le matricule {0} existe déjà ! ", matr);
+                        matr = -1;
+                    }
+                }
+
+                foreach (KeyValuePair<Int32, Technicien> t in listTechnicien)
+                {
+                    if (t.Key == matr)
+                    {
+                        Console.WriteLine("Le matricule {0} existe déjà !", matr);
+                        matr = -1;
+                    }
+                }
+            }
+            while (matr == -1);
+            return matr;
+        }
+
         private static void ModifierSalarie()
         {
             Console.Write("Entrez un matricule : ");
@@ -226,6 +238,8 @@ namespace TPCSharp
                     Console.WriteLine("2 : Changer Matricule");
                     Console.WriteLine("3 : Changer Email");
                     Console.WriteLine("4 : Changer Salaire");
+                    Console.WriteLine("5 : Changer Chiffre d'Affaire");
+                    Console.WriteLine("6 : Changer Commission");
 
                     Int32 choice = -1;
                     do
@@ -239,12 +253,24 @@ namespace TPCSharp
                                 c.Name = Console.ReadLine();
                                 break;
                             case 2:
-                                Console.Write("Matricule :");
-
+                                Console.Write("Matricule : ");
+                                c.Matricule = IsMatriculeValid();
                                 break;
                             case 3:
+                                Console.Write("Email : ");
+                                c.Email = Console.ReadLine();
                                 break;
                             case 4:
+                                Console.Write("Salaire : ");
+                                c.Salaire = CheckDouble(Console.ReadLine(), "Saisie salaire incorrect");
+                                break;
+                            case 5:
+                                Console.Write("Chiffre d'Affaire : ");
+                                c.ChiffreAffaire = CheckDouble(Console.ReadLine(), "Saisie Chiffre d'affaire érronée");
+                                break;
+                            case 6:
+                                Console.Write("Commission : ");
+                                c.Commission = GetCommission();
                                 break;
                             default:
                                 choice = -1;
@@ -257,9 +283,72 @@ namespace TPCSharp
                 {
                     Technicien t = GetSalarieByMatricule<Technicien>(matr);
                     DisplaySalarie(t);
+                    Console.WriteLine("1 : Changer Nom");
+                    Console.WriteLine("2 : Changer Matricule");
+                    Console.WriteLine("3 : Changer Email");
+                    Console.WriteLine("4 : Changer Salaire");
+
+                    Int32 choice = -1;
+                    do
+                    {
+                        Console.Write("Choix : ");
+                        choice = CheckInt(Console.ReadLine(), "Erreur choix !");
+                        switch (choice)
+                        {
+                            case 1:
+                                Console.Write("Nouveau Nom : ");
+                                t.Name = Console.ReadLine();
+                                break;
+                            case 2:
+                                Console.Write("Matricule :");
+                                t.Matricule = IsMatriculeValid();
+                                break;
+                            case 3:
+                                Console.Write("Email : ");
+                                t.Email = Console.ReadLine();
+                                break;
+                            case 4:
+                                Console.Write("Salaire : ");
+                                t.Salaire = CheckDouble(Console.ReadLine(), "Saisie salaire incorrect");
+                                break;
+                            default:
+                                choice = -1;
+                                break;
+                        }
+                    }
+                    while (choice <= 1 && choice >= 4);
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Get the commission from the console
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static Int32 GetCommission()
+        {
+            Boolean flag = false;
+            Int32 com;
+            do
+            {
+                Console.Write("Commission : ");
+                com = CheckInt(Console.ReadLine(), "Erreur saisie Commission");
+                if(com >= 0 && com <= 100)
+                {
+                    flag = true;
+                }
+                else
+                {
+                    Console.WriteLine("La commission doit être comprise entre 0 et 100 ");
+                    flag = false;
+                }
+
+            }
+            while (!flag);
+
+            return com;
         }
 
         /// <summary>
@@ -330,7 +419,6 @@ namespace TPCSharp
         }
 
 
-
         public static void AddEmployee(Int32 typeSalarie, Int32 matr)
         {
             Console.Write("Nom : ");
@@ -396,12 +484,7 @@ namespace TPCSharp
                 Console.Write("ChiffreAffaire: ");
                 Double ca = CheckDouble(Console.ReadLine(), "CA doit contenir seulement des chiffres !");
 
-                Console.Write("Commission (%): ");
-                Int32 com = -1;
-                do {
-                    com = CheckInt(Console.ReadLine(), "Erreur commission !");
-                }
-                while (com <= 0 && com >= 100);
+                Int32 com = GetCommission();
 
                 Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, em, sal, ca, com);
 

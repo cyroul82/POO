@@ -12,7 +12,7 @@ namespace TPCSharp
 
         public int Categorie { get; set; }
 
-        public int Matricule { get; private set; }
+        public int Matricule { get; set; }
 
         public int Service { get; set; }
 
