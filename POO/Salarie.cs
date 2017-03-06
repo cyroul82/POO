@@ -10,13 +10,40 @@ namespace TPCSharp
     public abstract class Salarie : Personne, IRemunerable, IComparable<Salarie>
     {
 
-        public int Categorie { get; set; }
+        public Int32 Matricule { get; set; }
 
-        public int Matricule { get; set; }
+        private Int32 categorie;
+        public int Categorie
+        {
+            get
+            {
+                return this.categorie;
+            }
+            set
+            {
 
-        public int Service { get; set; }
+                this.categorie = value;
+            }
+        }
 
-        public Double Salaire { get; set; }
+        public Int32 Service { get; set; }
+
+        private Double salaire;
+        public Double Salaire {
+            get
+            {
+                return this.salaire;
+            }
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new SalaireSalarieException(this);
+                }
+                this.salaire = value;
+            }
+        }
 
         public String Email { get; set; }
 
@@ -46,7 +73,13 @@ namespace TPCSharp
             Matricule = matricule;
             Email = email;
             Salaire = salaire;
+            if(salaire < 0)
+            {
+                throw new SalarieException(this);
+            }
+
             Personne.Count++;
+
         }
 
         public override bool Equals(object obj)

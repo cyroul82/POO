@@ -8,12 +8,12 @@ using System.Xml.Linq;
 
 namespace TPCSharp
 {
-    class Application
+    public class Application
     {
         private static Dictionary<Int32, Commercial> dictionnaryCommercial = new Dictionary<Int32, Commercial>();
         private static Dictionary<Int32, Technicien> listTechnicien = new Dictionary<Int32, Technicien>();
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             LoadFileList();
 
@@ -84,6 +84,13 @@ namespace TPCSharp
                     PrintErrorMessage();
                 }
             }
+        }
+
+        public static void Start()
+        {
+            dictionnaryCommercial = new Dictionary<Int32, Commercial>();
+            listTechnicien = new Dictionary<Int32, Technicien>();
+            LoadFileList();
         }
 
         /// <summary>
@@ -468,11 +475,18 @@ namespace TPCSharp
                 Double ca = CheckDouble(Console.ReadLine(), "CA doit contenir seulement des chiffres !");
 
                 Int32 com = GetCommission();
-
-                Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, sal, ca, com);
+                
                 try
                 {
+                    Commercial commercial = new Commercial(name, (Int32)Salarie.Salaries.Commercial, matr, cat, serv, email, sal, ca, com);
                     dictionnaryCommercial.Add(commercial.Matricule, commercial);
+                    Console.WriteLine("");
+                    Console.WriteLine("Ajouté ! ");
+                    Console.WriteLine("");
+                }
+                catch(SalaireSalarieException se)
+                {
+                    Console.WriteLine(se.ToString());
                 }
                 catch (ArgumentNullException)
                 {
@@ -487,14 +501,24 @@ namespace TPCSharp
             }
             else if (typeSalarie == (Int32)Salarie.Salaries.Technicien)
             {
-                Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, email, sal);
+                try
+                {
+                    Technicien technicien = new Technicien(name, (Int32)Salarie.Salaries.Technicien, matr, cat, serv, email, sal);
+                    listTechnicien.Add(technicien.Matricule, technicien);
+                    Console.WriteLine("");
+                    Console.WriteLine("Ajouté ! ");
+                    Console.WriteLine("");
+                }
+                catch (SalaireSalarieException se)
+                {
+                    Console.WriteLine(se.ToString());
+                }
+                
 
-                listTechnicien.Add(technicien.Matricule, technicien);
+                
             }
 
-            Console.WriteLine("");
-            Console.WriteLine("Ajouté ! ");
-            Console.WriteLine("");
+            
         }
 
         /// <summary>
@@ -716,7 +740,36 @@ namespace TPCSharp
             }
         }
 
-        private static T GetSalarieByMatricule<T>(Int32 mat) where T:Salarie
+        public static void findSalarieByMatricule(Int32 mat)
+        {
+            
+
+            Salarie s = null;
+
+            foreach (KeyValuePair<Int32, Commercial> kvp in dictionnaryCommercial)
+            {
+                if (kvp.Key == mat)
+                {
+                    s = kvp.Value;
+                }
+            }
+            foreach (KeyValuePair<Int32, Technicien> tech in listTechnicien)
+            {
+                if (tech.Key == mat)
+                {
+                    s = tech.Value;
+                }
+            }
+
+
+            if (s != null)
+            {
+                DisplaySalarie(s);
+            }
+            
+        }
+
+        public static T GetSalarieByMatricule<T>(Int32 mat) where T:Salarie
         {
             foreach (KeyValuePair<Int32, Commercial> kvp in dictionnaryCommercial)
             {

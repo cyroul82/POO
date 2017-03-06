@@ -25,9 +25,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" >
-            <Button x:Name="AddSalarieButton" Content="Ajouter" Height="30" Width="110" Click="addButton_Click"></Button>
+            <Button x:Name="AddSalarieButton" Content="Ajouter" Height="30" Width="110" Click="AddButton_Click"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
-            <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="110"></Button>
+            <Button x:Name="RechercherButton" Content="Rechercher" Height="30" Width="110" Click="SearchButton_Click"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
             <Button x:Name="DisplayListButton" Content="Liste" Height="30" Width="110"></Button>
             <Separator Width="20" Background="Transparent"></Separator>
@@ -38,7 +38,14 @@
             <Button x:Name="SaveButton" Content="Enregistrer" Height="30" Width="110" ></Button>
         </StackPanel>
 
-        <StackPanel  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="20 0 20 0">
+        <StackPanel x:Name="SearchMatriculePanel"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20 0 20 0" Orientation="Vertical">
+            <Label Content="Matricule" HorizontalAlignment="Center"/>
+            <TextBox x:Name="MatriculeTextBox" Width="80" HorizontalAlignment="Center"/>
+            <Separator Height="10" Background="Transparent"></Separator>
+            <Button x:Name ="SearchMatriculeButton" Content="Rechercher" Width="110" Click="SearchMatriculeButton_Click"/>
+        </StackPanel>
+
+        <StackPanel x:Name="AddPanel" Visibility="Collapsed" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="20 0 20 0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -50,12 +57,12 @@
 
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Nom :" HorizontalAlignment="Right"/>
                 <Label Grid.Row="1" Grid.Column="0" Content="Matricule :" HorizontalAlignment="Right"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Salaire" HorizontalAlignment="Right"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Salaire :" HorizontalAlignment="Right"/>
                 <Label Grid.Row="3" Grid.Column="0" Content="Email :" HorizontalAlignment="Right"/>
                 <Label Grid.Row="4" Grid.Column="0" Content="Categorie :" HorizontalAlignment="Right"/>
 
