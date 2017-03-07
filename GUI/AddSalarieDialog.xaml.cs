@@ -21,9 +21,14 @@ namespace GUI
     /// </summary>
     public partial class AddSalarieDialog : Window
     {
-        public AddSalarieDialog()
+        private Salarie salarie;
+        public AddSalarieDialog(Salarie salarie)
         {
+            this.salarie = salarie;
             InitializeComponent();
+            nameTextBox.Text = salarie.Name;
+            emailTextBox.Text = salarie.Email;
+            salaireTextBox.Text = salarie.Salaire.ToString();
         }
 
 

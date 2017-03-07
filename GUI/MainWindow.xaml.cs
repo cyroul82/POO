@@ -74,7 +74,12 @@ namespace GUI
                 Salarie s = TPCSharp.Application.GetSalarieByMatricule<Salarie>(mat);
                 if (s != null)
                 {
-                    MessageBox.Show("Salarié Trouvé", "Salarié Trouvé", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    AddSalarieDialog addSalarieDialog = new AddSalarieDialog(s);
+                    //MessageBox.Show("Salarié Trouvé", "Salarié Trouvé", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    addSalarieDialog.Owner = this;
+
+                    addSalarieDialog.Show();
+
                 }
                 else
                 {

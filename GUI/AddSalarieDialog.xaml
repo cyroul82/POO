@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="AddSalarieDialog" Height="231.933" Width="300" ResizeMode="NoResize"
-        Background="#3F587F">
+        WindowStartupLocation="CenterOwner"
+        FocusManager.FocusedElement="{Binding ElementName=nameTextBox}"
+        Title="Salarié" Height="231.933" Width="300" ResizeMode="NoResize">
     <Grid Margin="0,0,0,1">
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0 10 0 0" Text="Ajouter un salarié" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0 10 0 0" Text="Salarié" VerticalAlignment="Top"/>
         <Label x:Name="nameLabel" Content="Nom : " HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="35,65,0,0"/>
         <ComboBox x:Name="typeComboBox" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Margin="90,39,0,0">
             <ComboBoxItem Content="Commercial"/>
@@ -29,7 +30,7 @@
         
 
     </Grid>
-    <Window.Resources>
+    <!--<Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="#7EB0FF"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -42,7 +43,7 @@
             <Setter Property="Foreground" Value="White"/>
         </Style>
         
-    </Window.Resources>
+    </Window.Resources>-->
 </Window>
 
 
